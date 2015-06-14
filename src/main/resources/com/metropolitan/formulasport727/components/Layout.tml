@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="sr" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+        >
+<head>
+    <meta charset="utf-8" />
+    <title>${title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#meni">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span> 
+        </button>
+        <t:pagelink page="index" class="navbar-brand">FormulaSport727.com</t:pagelink>
+    </div>
+    <div class="collapse navbar-collapse" id="meni">
+      <ul class="nav navbar-nav">
+        <t:loop source="pageNames" value="pageName">
+            <t:any element="li" class="prop:classForPageName">
+                <t:pagelink page="prop:pageName">${prepare(pageName)}</t:pagelink>
+            </t:any>
+        </t:loop>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+          <li>
+              <t:pagelink page="Registracija">
+                  <span class="glyphicon glyphicon-user"></span> Registracija</t:pagelink>
+          </li>
+          <li><t:pagelink page="Login">
+                  <span class="glyphicon glyphicon-log-in"></span> Prijava</t:pagelink>
+          </li>
+      </ul>
+    </div>
+  </div>
+</nav>  
+<div class="container">
+    <div class="jumbotron">
+        <h1>
+            FormulaSport727.com
+        </h1>
+        <p>
+            Svet formule i autosporta
+        </p>
+    </div>
+</div>  
+<!--<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+	    <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <t:pagelink page="index" class="navbar-brand">app</t:pagelink>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <t:loop source="pageNames" value="pageName">
+                    <t:any element="li" class="prop:classForPageName">
+                        <t:pagelink page="prop:pageName">${pageName}</t:pagelink>
+                    </t:any>
+                </t:loop>
+            </ul>
+            <span class="navbar-right">
+                <li>
+                    <t:pagelink page="login" class="btn btn-default navbar-btn">Sign in</t:pagelink>
+               	</li>
+            </span>
+
+        </div>--><!--/.nav-collapse -->
+    <!--</div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <t:alerts/>
+        </div>
+    </div>
+</div>-->
+
+<div class="container">
+
+    <t:body />
+
+    <nav class="navbar navbar-inverse navbar-fixed-bottom">
+          <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#meni2">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span> 
+                </button>
+                <t:pagelink page="index" class="navbar-brand">FormulaSport727</t:pagelink>
+            </div>
+            <div class="collapse navbar-collapse" id="meni2">
+              <ul class="nav navbar-nav">
+                <t:loop source="pageNames" value="pageName">
+                    <t:any element="li" class="prop:classForPageName">
+                        <t:pagelink page="prop:pageName">${prepare(pageName)}</t:pagelink>
+                    </t:any>
+                </t:loop>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                  <li>
+                      <t:pagelink page="Registracija">
+                          <span class="glyphicon glyphicon-user"></span> Registracija</t:pagelink>
+                  </li>
+                  <li><t:pagelink page="Login">
+                          <span class="glyphicon glyphicon-log-in"></span> Prijava</t:pagelink>
+                  </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+</div> <!-- /container -->
+
+</body>
+</html>
