@@ -1,0 +1,53 @@
+<html t:type="layout" title="${message:naslov}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <div class="row centartekst">
+        <t:zone t:id="zonaNaslova">
+            <t:if test="!IzmenaVesti">
+                <h3>
+                    ${message:novaVest}
+                </h3>
+            </t:if>
+            <t:if test="IzmenaVesti">
+                <h3>
+                    ${message:izmenaVesti}
+                </h3>
+            </t:if>
+        </t:zone>
+    </div>
+    <div class="row">
+        <t:zone t:id="zonaForme">
+            <t:form t:id="formaVesti">
+                <t:label for="izborKategorije"/>    
+                <t:select t:id="izborKategorije" t:model="kategorije" validate="required"
+                          encoder="encoderKategorije" label="message:izborKategorije-label"/>
+                <t:label for="naslov"/>    
+                <t:Textfield t:id="naslov" validate="required"/>
+                <t:label for="tekst"/>    
+                <t:Textarea t:id="tekst" validate="required"/>
+                <t:label for="slika"/>
+                <t:Textfield t:id="slika" validate="required"/>
+                <t:if test="ObjaviKasnije">
+                    <t:label for="datum"/>
+                    <t:DateField t:id="datum" validate="required"/>
+                    <t:label for="sat"/>
+                    <t:Textfield t:id="sat" value="satObjave" validate="required,max=23,min=0"/>
+                    <t:label for="minut"/>
+                    <t:Textfield t:id="minut" value="minutObjave" validate="required,max=59,min=0"/>
+                    <t:label for="sekund"/>
+                    <t:Textfield t:id="sekund" value="sekundObjave" validate="required,max=59,min=0"/>
+                </t:if>
+                <t:submit class="btn btn-large btn-primary" value="message:posalji"/>
+            </t:form>
+        </t:zone>
+        <t:form t:id="formaKasnije" t:zone="zonaForme">
+            <t:label for="kasnije"/>
+            <t:Checkbox t:id="kasnije" type="checkbox" onchange="this.form.submit()"/> 
+        </t:form>
+        <t:eventlink t:event="NovaVest" t:zone="zonaForme" class="btn btn-primary btn-large">
+            ${message:novaVest}
+        </t:eventlink>
+    </div>
+
+</html>

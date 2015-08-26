@@ -1,0 +1,122 @@
+<html t:type="layout" title="${izabranaVest.naslovVesti}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <div class="row">
+        <div class="col-sm-8 col-md-8 col-lg-8">
+            <div class="row izvest">
+                <img class="img-responsive" src="${izabranaVest.slikaVesti}"></img>
+            </div>
+            <div class="row izvest">
+                <h4><t:output format="format" value="izabranaVest.vremeObjave"/> -
+                ${izabranaVest.korId.korisnickoIme}</h4>
+            </div>
+            <div class="row izvest centartekst">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <h1>${izabranaVest.naslovVesti}</h1>
+                </div>
+            </div>
+            <div class="row izvest razvucentekst formatiranitekst">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    ${izabranaVest.tekstVesti}
+                </div>
+            </div>
+            <t:if test="imaKomentara">
+                <t:zone t:id="zonaPrikazaKomentara">
+                    <div class="row izvest centartekst">
+                        <h3>${message:komentari}</h3>
+                    </div>
+                    <t:loop source="komentariVesti" value="komentar">    
+                        <div class="row izvest komvest">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <p>
+                                    <h5>
+                                        <b>${message:komentar}</b>
+                                    </h5>
+                                </p>
+                                <h4>
+                                    <t:if test="imaNaslov">
+                                    ${komentar.naslovKomentara}
+                                    </t:if>
+                                    <t:if test="!imaNaslov">
+                                    ${message:nema-naslova-komentara}
+                                    </t:if>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row izvest komvest">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <t:output format="format" value="komentar.vreme"/>
+                                - ${komentar.korId.korisnickoIme}
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-12 razvucentekst formatiranitekst">
+                                ${komentar.tekstKomentara}
+                            </div>
+                            <t:if test="ulogovan">
+                                <t:if test="Moderator">
+                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                        <t:eventlink t:event="IzmeniKomentar" class="btn btn-large btn-primary"
+                                        t:context="komentar" t:zone="zonaFormeKomentara">
+                                            ${message:izmenaKomentara}
+                                        </t:eventlink>
+                                        <t:eventlink t:event="BrisanjeKomentara" class="btn btn-large btn-primary"
+                                        t:context="komentar.id" t:zone="zonaPrikazaKomentara"
+                                        t:mixins="Confirm" t:Confirm.title="message:potvrdaBrisanja-label" 
+                                            t:Confirm.message="message:sigurni">
+                                            ${message:brisanjeKomentara}
+                                        </t:eventlink>
+                                    </div>
+                                </t:if>
+                            </t:if>
+                        </div>
+                    </t:loop>
+                </t:zone>    
+            </t:if>
+            <t:if test="ulogovan">
+                <t:zone t:id="zonaFormeKomentara">
+                    <t:if test="!imaKomentara">
+                        <div class="row izvest centartekst">
+                            <p>${message:nema-komentara}</p>
+                        </div>
+                    </t:if>
+                    <div class="row izvest">
+                        <t:if test="!IzmenaKomentara">
+                            <h4>
+                                <b>${message:novi-komentar}</b>
+                            </h4>
+                        </t:if>
+                        <t:if test="IzmenaKomentara">
+                            <h4>
+                                <b>${message:menjanjeKomentara}</b>
+                            </h4>
+                        </t:if>
+                    </div>
+                    <div class="row izvest">
+                        <t:form t:id="novKomentar" t:zone="zonaPrikazaKomentara">
+                            <t:label for="naslovKomentara"/>
+                            <t:textfield t:id="naslovKomentara" label="message:naslovKomentara-label" />
+                            <t:label for="tekstKomentara"/>
+                            <t:textarea t:id="tekstKomentara" label="message:tekstKomentara-label" 
+                                        t:validate="required" />
+                            <t:submit class="btn btn-large btn-primary" value="message:nov-komentar-label"/>
+                        </t:form>
+                    </div>
+                </t:zone>
+            </t:if>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <p>
+                <b>${message:pretraga-vesti}</b>
+            </p>
+            <t:beaneditform t:id="pretraga" object="pretraga" submitlabel="message:submit-label"
+                            add="kid">
+                <p:kid>
+                    <t:label for="kategorija"/>:
+                    <t:select t:blankLabel="Kategorija" t:id="kategorija" 
+                              encoder="encoder" model="kategorije" validate="required"/>
+                </p:kid>
+            </t:beaneditform>
+        </div>
+    </div>
+
+</html>

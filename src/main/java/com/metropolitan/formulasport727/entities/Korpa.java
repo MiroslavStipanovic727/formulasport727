@@ -14,9 +14,10 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Korpa iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -31,6 +32,7 @@ public class Korpa extends AbstraktniEntitet {
     @ManyToOne(optional = false)
     private Korisnik korId;
 
+    @Inject
     public Korpa() {
     }
 

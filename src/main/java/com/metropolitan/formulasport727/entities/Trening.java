@@ -18,9 +18,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Trening iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -31,10 +33,12 @@ public class Trening extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "NAZIV_TRENINGA")
+    @Validate("required")
     private String nazivTreninga;
     @Basic(optional = false)
     @Column(name = "VREME_TRENINGA")
     @Temporal(TemporalType.TIMESTAMP)
+    @Validate("required")
     private Date vremeTreninga;
     @OneToMany(mappedBy = "treId")
     private List<PozicioniRezultat> pozicioniRezultatList;
@@ -42,6 +46,7 @@ public class Trening extends AbstraktniEntitet {
     @ManyToOne(optional = false)
     private VelikaNagrada velId;
 
+    @Inject
     public Trening() {
     }
 
@@ -117,7 +122,7 @@ public class Trening extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Trening: "+getNazivTreninga();
+        return getNazivTreninga();
     }
     
 }

@@ -19,9 +19,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Vozac iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -32,15 +34,18 @@ public class Vozac extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "IME_VOZACA")
+    @Validate("required")
     private String imeVozaca;
     @Basic(optional = false)
     @Column(name = "PREZIME_VOZACA")
+    @Validate("required")
     private String prezimeVozaca;
     @Column(name = "BROJ")
     private Integer broj;
     @Basic(optional = false)
     @Column(name = "DATUM_RODJENJA")
     @Temporal(TemporalType.DATE)
+    @Validate("required")
     private Date datumRodjenja;
     @Basic(optional = false)
     @Column(name = "SLIKA")
@@ -66,6 +71,7 @@ public class Vozac extends AbstraktniEntitet {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vozId")
     private List<TrkackiRezultat> trkackiRezultatList;
 
+    @Inject
     public Vozac() {
     }
 
@@ -215,7 +221,7 @@ public class Vozac extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Vozač: "+getImeVozaca().substring(0, 1)+"."+getPrezimeVozaca();
+        return getImeVozaca().substring(0, 1)+"."+getPrezimeVozaca();
     }
     
 }

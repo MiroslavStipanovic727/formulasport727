@@ -1,0 +1,128 @@
+<html t:type="layout" title="${diskusija.naslovDiskusije}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <div class="row tekstdiskusije">
+        <p>
+            <h5>
+                ${message:kategorija}${diskusija.disId.katId.nazivKategorije}
+            </h5>
+        </p>
+        <p>
+            <h4>
+                <t:eventlink t:event="nazadNaDg">
+                    ${message:dGrupa}${diskusija.disId.nazivDg}
+                </t:eventlink>
+            </h4>
+        </p>
+        <p>
+            <h3>
+                ${message:naslovD}${diskusija.naslovDiskusije}
+            </h3>
+        </p>
+    </div>
+    <div class="row tekstdiskusije">
+        <h4>
+            ${message:opisD}
+        </h4>
+        <p class="formatiranitekst">
+            ${diskusija.opisDiskusije}
+        </p>
+    </div>
+    <div class="row tekstdiskusije">
+        <b>${message:autorDiskusije}</b>
+        ${diskusija.korId.korisnickoIme} - 
+        <b>${message:vremeOtvaranja}</b>
+        <t:output format="format" value="diskusija.vremeOtvaranja"/>
+        <t:if test="Moderator">
+            <t:zone t:id="zonaModDiskOpcija">
+                <t:eventlink t:event="IzmenaDiskusije" class="btn btn-large btn-primary">
+                    ${message:izmeniDiskusiju}
+                </t:eventlink>
+                <t:if test="NeodobrenaDiskusija">
+                    <t:eventlink t:event="OdobrenjeDiskusije" t:zone="zonaModDiskOpcija" class="btn btn-large btn-primary">
+                        ${message:odobriDiskusiju}
+                    </t:eventlink>
+                </t:if>
+                <t:eventlink t:event="ZabranaDiskusije" class="btn btn-large btn-primary"
+                t:mixins="Confirm" t:Confirm.title="message:potvrdaBrisanja-label" 
+                            t:Confirm.message="${message:potvdaBrisanjaDiskusije}${diskusija.naslovDiskusije}">
+                    ${message:zabraniDiskusiju}
+                </t:eventlink>
+            </t:zone>
+        </t:if>
+    </div>
+    <t:zone t:id="zonaPrikazKomentara">
+        <t:loop source="komentari" value="komentar">
+            <t:any element="div" class="row tekstdiskusije">
+                <p>
+                    <h4>
+                        ${message:komentar}
+                    </h4>
+                </p>
+                <h5>
+                    <t:if test="ImaNaslovKomentara">
+                        <b>${message:naslovK}</b>${komentar.naslovKd}
+                    </t:if>
+                    <t:if test="!ImaNaslovKomentara">
+                        <i>${message:bezNaslovaK}</i>
+                    </t:if>
+                </h5>
+            </t:any>
+            <t:any element="div" class="row tekstdiskusije">
+                <h5>
+                    <b>${message:tekstK}</b>
+                </h5>
+                <p class="formatiranitekst">
+                    ${komentar.tekstKd}
+                </p>
+            </t:any>
+            <t:any element="div" class="row tekstdiskusije">
+                <p>
+                    <b>${message:autorKomentara}</b>${komentar.korId.korisnickoIme} - 
+                    <b>${message:vremePostavljanja}</b>
+                    <t:output format="format" value="komentar.vremePostavljanja"/>
+                    <t:if test="Moderator">
+                        <t:eventlink t:event="IzmeniKomentar" class="btn btn-large btn-primary"
+                        t:context="komentar" t:zone="zonaFormeKomentar">
+                            ${message:izmenaKomentara}
+                        </t:eventlink>
+                        <t:eventlink t:event="BrisanjeKomentara" class="btn btn-large btn-primary"
+                        t:context="komentar.id" t:zone="zonaPrikazKomentara"
+                        t:mixins="Confirm" t:Confirm.title="message:potvrdaBrisanja-label" 
+                            t:Confirm.message="message:sigurni">
+                            ${message:brisanjeKomentara}
+                        </t:eventlink>
+                    </t:if>
+                </p>
+            </t:any>    
+        </t:loop>
+    </t:zone>
+    <t:zone t:id="zonaFormeKomentar">
+        <div class="row">
+            <t:if test="!IzmenaKomentara">
+                <h4>
+                    <b>${message:noviKomentar}</b>
+                </h4>
+            </t:if>
+            <t:if test="IzmenaKomentara">
+                <h4>
+                    <b>${message:menjanjeKomentara}</b>
+                </h4>
+            </t:if>
+            <t:form t:id="novKomentar" t:zone="zonaPrikazKomentara">
+                <t:label for="naslovKomentara"/>
+                <t:textfield t:id="naslovKomentara" label="message:naslovKomentara-label" />
+                <t:label for="tekstKomentara"/>
+                <t:textarea t:id="tekstKomentara" label="message:tekstKomentara-label" 
+                            t:validate="required" />
+                <t:if test="!IzmenaKomentara">
+                    <t:submit class="btn btn-large btn-primary" value="message:novKomentar"/>
+                </t:if>
+                <t:if test="IzmenaKomentara">
+                    <t:submit class="btn btn-large btn-primary" value="message:editKomentar"/>
+                </t:if>
+            </t:form>
+        </div>   
+    </t:zone> 
+</html>

@@ -2,6 +2,26 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-
+    <t:beaneditform t:id="registracijaKorisnika" object="korisnik" exclude="id,uloga"
+    add="kid,captchaImage,cap" submitlabel="message:submit-label">
+        <p:sifra>
+            <t:label for="sifra"/>
+            <t:passwordfield t:id="sifra" value="korisnik.sifra"/>
+        </p:sifra>
+        <p:kid>
+            <t:label for="omiljenaKategorija"/>:
+            <t:select t:blankLabel="message:nijedna-label" t:id="omiljenaKategorija" 
+                      encoder="encoder" model="kategorije"/>
+        </p:kid>
+        <p:captchaImage>
+            <label for="captchaImage">${message:kaptcha-label}</label>
+            <t:KaptchaImage t:id="kaptchaImage" t:validate="none"/>
+        </p:captchaImage>
+        <p:cap>
+            <t:KaptchaField t:image="kaptchaImage" id="cap" visible="true"
+            label="characters"/>
+        </p:cap>
+        <t:errors/>
+    </t:beaneditform>
 
 </html>

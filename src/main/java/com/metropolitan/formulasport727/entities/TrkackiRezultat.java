@@ -13,9 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Trkacki Rezultat iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -26,9 +28,11 @@ public class TrkackiRezultat extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "OSTVARENI_REZULTAT")
+    @Validate("required")
     private String ostvareniRezultat;
     @Basic(optional = false)
     @Column(name = "POZICIJA_TR")
+    @Validate("required")
     private int pozicijaTr;
     @JoinColumn(name = "VOZ_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
@@ -37,6 +41,7 @@ public class TrkackiRezultat extends AbstraktniEntitet {
     @ManyToOne(optional = false)
     private Trka trkId;
 
+    @Inject
     public TrkackiRezultat() {
     }
 

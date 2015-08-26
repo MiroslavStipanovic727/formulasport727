@@ -13,9 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Pozicioni Rezultat iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -26,9 +28,11 @@ public class PozicioniRezultat extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "VREME_REZULTATA")
+    @Validate("required")
     private String vremeRezultata;
     @Basic(optional = false)
     @Column(name = "POZICIJA_PR")
+    @Validate("required")
     private int pozicijaPr;
     @JoinColumn(name = "VOZ_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
@@ -40,6 +44,7 @@ public class PozicioniRezultat extends AbstraktniEntitet {
     @ManyToOne
     private Kvalifikacije kvaId;
 
+    @Inject
     public PozicioniRezultat() {
     }
 

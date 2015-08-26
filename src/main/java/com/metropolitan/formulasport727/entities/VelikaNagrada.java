@@ -19,9 +19,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Velika Nagrada iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -32,14 +34,17 @@ public class VelikaNagrada extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "NAZIV_VN")
+    @Validate("required")
     private String nazivVn;
     @Basic(optional = false)
     @Column(name = "DATUM_POCETKA")
     @Temporal(TemporalType.DATE)
+    @Validate("required")
     private Date datumPocetka;
     @Basic(optional = false)
     @Column(name = "DATUM_ZAVRSETKA")
     @Temporal(TemporalType.DATE)
+    @Validate("required")
     private Date datumZavrsetka;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "velId")
     private List<Kvalifikacije> kvalifikacijeList;
@@ -57,6 +62,7 @@ public class VelikaNagrada extends AbstraktniEntitet {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "velId")
     private List<Trening> treningList;
 
+    @Inject
     public VelikaNagrada() {
     }
 
@@ -173,7 +179,7 @@ public class VelikaNagrada extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Velika Nagrada: "+getNazivVn();
+        return getNazivVn();
     }
     
 }

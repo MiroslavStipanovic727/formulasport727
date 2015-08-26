@@ -1,0 +1,26 @@
+<html t:type="layout" title="${message:naslov}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <div class="row centartekst">
+        <h3>
+            ${message:diskusionaGrupa}${diskusionaGrupa.katId.nazivKategorije} - ${diskusionaGrupa.nazivDg}
+        </h3>
+    </div>
+    <div class="row">
+        <t:form t:id="novaDiskusija">
+            <t:label for="naslovDiskusije"/>
+            <t:textfield t:id="naslovDiskusije" label="message:naslovDiskusije-label" 
+                         t:validate="required" />
+            <t:label for="opisDiskusije"/>
+            <t:textarea t:id="opisDiskusije" label="message:opisDiskusije-label" 
+                        t:validate="required" />
+            <t:if test="!IzmenaDiskusije">
+                <t:submit class="btn btn-large btn-primary" value="message:novaDiskusija"/>
+            </t:if>
+            <t:if test="IzmenaDiskusije">
+                <t:submit class="btn btn-large btn-primary" value="message:editDiskusija"/>
+            </t:if>
+        </t:form>
+    </div>
+</html>

@@ -22,7 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- *
+ * Klasa koja predstavlja entitet Vest iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -155,7 +155,7 @@ public class Vest extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Vest: "+getNaslovVesti();
+        return getNaslovVesti();
     }
     
 }

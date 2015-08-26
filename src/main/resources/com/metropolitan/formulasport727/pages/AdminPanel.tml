@@ -2,6 +2,863 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
+    <t:zone t:id="zonaFormeIzborPodataka">
+        <t:form t:id="izborPodataka" t:zone="zonaPrikazaIzabranihPodataka">
+            <t:label for="tipovi"/>
+            <t:select t:id="tipovi" label="message:izborTipa-label"
+            onchange="this.form.submit()"/>
+        </t:form>
+    </t:zone>
+    
+    <t:zone t:id="zonaPrikazaIzabranihPodataka">
+        <t:if test="prikazKlijenata">
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-3">  
+                    <t:zone t:id="zonaFormeUnosIzmenaKorisnika"> 
+                        <t:if test="imaKorisnika">
+                            <t:zone t:id="zonaFormeIzmenaKorisnika">  
+                                <t:beaneditform t:id="izmenakorisnika" object="korisnik" exclude="id" 
+                                                reorder="email,sifra,izmenasifre,imeKorisnika,prezimeKorisnika,uloga"
+                                                add="kid, izmenasifre" submitlabel="message:submit-label-korisnik-izmena">
+                                    <p:kid>
+                                        <t:label for="omiljenaKategorija"/>:
+                                        <t:select t:blankLabel="Omiljena Kategorija" t:id="omiljenaKategorija" 
+                                                  encoder="encoderKategorije" model="kategorije"/>
+                                    </p:kid>
+                                    <p:izmenasifre>
+                                        <t:label for="izmenaSifre"/>:
+                                        <t:Checkbox t:id="izmenaSifre" type="checkbox"/>
+                                    </p:izmenasifre>
+                                    <t:errors/>            
+                                </t:beaneditform> 
+                            </t:zone>
+                            <t:actionlink t:id="resetKorisnika" t:zone="zonaFormeUnosIzmenaKorisnika" 
+                                          class="btn btn-primary btn-large">${message:reset-label}</t:actionlink>   
+                        </t:if> 
+                        <t:if test="!imaKorisnika">
+                            <t:zone t:id="zonaFormeUnosKorisnika">
+                                <t:beaneditform t:id="unoskorisnika" object="korisnik" exclude="id"
+                                            reorder="email,sifra, imeKorisnika,prezimeKorisnika,uloga"
+                                            add="kid" submitlabel="message:submit-label-korisnik">
+                                <p:kid>
+                                    <t:label for="omiljenaKategorijaUnos"/>:
+                                    <t:select t:blankLabel="Omiljena Kategorija" t:id="omiljenaKategorijaUnos" 
+                                              encoder="encoderKategorije" model="kategorije"/>
+                                </p:kid>
+                                <t:errors/>            
+                                </t:beaneditform>  
+                            </t:zone>      
+                        </t:if>
+                    </t:zone>
+                </div>
+                <div class="col-sm-8 col-md-8 col-lg-9">
+                    <t:zone t:id="zonaGridaKorisnik"> 
+                        <t:jquery.datatable t:source="korisnici" t:options="options" 
+                                            add="editkorisnik, deletekorisnik, kategorija" row="redkorisnik"
+                                exclude="id" reorder="korisnickoIme,email,sifra,imeKorisnika,prezimeKorisnika,lokacija,uloga,kategorija">
+                            <p:editkorisnikCell>
+                                <t:actionlink t:id="editkorisnik" t:zone="zonaFormeIzmenaKorisnika" 
+                                              context="redkorisnik">${message:izmeni}</t:actionlink>
+                            </p:editkorisnikCell>
+                            <p:deletekorisnikCell>
+                                <t:actionlink t:id="deletekorisnik" context="redkorisnik.email" 
+                                              t:zone="zonaGridaKorisnik"
+                                              t:title="message:potvrdaBrisanja-label" 
+                                              t:message="${message:potvrdaBrisanjaKorisnika-label}
+                                              ${redkorisnik.korisnickoIme}" t:mixins="Confirm">${message:obrisi}</t:actionlink>
+                            </p:deletekorisnikCell>
+                            <p:kategorijaCell>
+                                ${OmiljenaKategorijaTabela}
+                            </p:kategorijaCell>
+                        </t:jquery.datatable>
+                    </t:zone>
+                </div>
+            </div> 
+        </t:if>
+        <t:if test="prikazArtikala">
+            <div class="row">
 
-
+                <div class="col-sm-4 col-md-4 col-lg-3">  
+                    <t:zone t:id="zonaFormeUnosArtikla">
+                        <t:beaneditform t:id="unosIzmenaArtikla" object="artikal" exclude="id"
+                                        reorder="nazivArtikla, kratakOpis, cena"
+                                        add="tid, novtip" submitlabel="message:submit-label-artikal">
+                            <p:tid>
+                                <t:label for="kategorijaArtikla"/>:
+                                <t:select t:blankLabel="Kategorija Artikla" t:id="kategorijaArtikla" 
+                                          encoder="encoderTipaArtikla" model="tipoviArtikla"/>
+                            </p:tid>
+                            <p:novtip>
+                                <t:label for="novtip"/>:
+                                <t:Textfield t:id="novtip"/>
+                            </p:novtip>
+                            <t:errors/>            
+                        </t:beaneditform> 
+                    </t:zone>
+                    <t:actionlink t:id="resetArtikla" class="btn btn-primary btn-large" 
+                    t:zone="zonaFormeUnosArtikla">
+                        ${message:reset-label}
+                    </t:actionlink>   
+                </div>
+                <div class="col-sm-8 col-md-8 col-lg-9"> 
+                    <t:zone t:id="zonaFormeTipArtikla">
+                        <t:form t:id="izborTipaArtikla" t:zone="zonaPrikazaArtikala">
+                            <t:label for="izborKategorijeArtikla"/>    
+                            <t:select t:id="izborKategorijeArtikla" t:model="kategorijeArtiklaTabela" 
+                                      onchange="this.form.submit()" encoder="encoderTipaArtikla" 
+                                      t:value="kategorijaArtiklaTabela" label="message:izborKategorijeArtikla-label"/>
+                        </t:form>
+                    </t:zone>
+                    <t:zone t:id="zonaPrikazaArtikala">
+                        <t:jquery.datatable t:source="artikli" t:options="options" add="editartikal, deleteartikal, tipartikla" row="redartikal"
+                                exclude="id" reorder="nazivArtikla, kratakOpis, cena, tipartikla, editartikal, deleteartikal">-->   
+                            <p:editartikalCell>
+                                <t:actionlink t:id="editartikal" context="redartikal"
+                                t:zone="zonaFormeUnosArtikla">
+                                    ${message:izmeni}
+                                </t:actionlink>
+                            </p:editartikalCell>
+                            <p:deleteartikalCell>
+                                <t:actionlink t:id="deleteartikal" context="redartikal.id" 
+                                t:title="message:potvrdaBrisanja-label" t:zone="zonaPrikazaArtikala"
+                                t:message="${message:potvrdaBrisanjaArtikla-label}
+                                ${redartikal.nazivArtikla}" t:mixins="Confirm">
+                                    ${message:obrisi}</t:actionlink>
+                            </p:deleteartikalCell>
+                            <p:tipartiklaCell>
+                                ${TipArtikla}
+                            </p:tipartiklaCell>
+                        </t:jquery.datatable>
+                    </t:zone>
+                </div>
+            </div>
+        </t:if>
+        <t:if test="prikazSampionata">
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-3"> 
+                    <t:zone t:id="zonaFormeIzborPodatakaUnos"> 
+                        <t:form t:id="izborPodatakaUnos" t:zone="zonaPrikazaUnosFormeSampionata">
+                            <t:label for="izborKategorijeUnos"/>    
+                            <t:select t:id="izborKategorijeUnos" t:model="kategorijeUnos" onchange="this.form.submit()"
+                                      encoder="encoderKategorije" t:value="vrednostKategorijeUnos" label="message:izborKategorije-label"/>
+                            <t:label for="novaKategorijaUnos"/>    
+                            <t:Textfield t:id="novaKategorijaUnos"/>
+                            <t:label for="izborSezoneUnos"/>
+                            <t:select t:id="izborSezoneUnos" t:model="sezoneUnos" onchange="this.form.submit()"
+                                      encoder="encoderSezone" t:value="vrednostSezoneUnos" label="message:izborSezone-label"/>
+                            <t:label for="novaSezonaUnos"/>    
+                            <t:Textfield t:id="novaSezonaUnos"/>
+                            <t:label for="tipovi"/>
+                            <t:select t:id="tipoviPodatakaUnos" label="message:izborTipa-label" onchange="this.form.submit()"/>
+                            <t:submit class="btn btn-large btn-primary" value="message:izaberi-podatke-label"/>
+                        </t:form>
+                    </t:zone>
+                    <t:if test="prikazUnosForme">
+                        <t:zone t:id="zonaPrikazaUnosFormeSampionata">
+                            <t:if test="UnosFormaVozac">
+                                <t:zone t:id="zonaFormeUnosIzmenaVozaca">
+                                    <t:beaneditform t:id="unosIzmenaVozaca" object="vozac" exclude="id"
+                                                    reorder="imeVozaca, prezimeVozaca, drzid, timid, broj, datumRodjenja, slika, pozicija, bodovi"
+                                                    add="pozicija, bodovi, timid, drzid" submitlabel="message:submit-label-vozac">
+                                        <p:pozicija>
+                                            <t:label for="pozicijaUnos"/>:
+                                            <t:Textfield t:id="pozicijaUnos"/>
+                                        </p:pozicija>
+                                        <p:bodovi>
+                                            <t:label for="bodoviUnos"/>:
+                                            <t:Textfield t:id="bodoviUnos"/>
+                                        </p:bodovi>
+                                        <p:timid>
+                                            <t:label for="timVozacaUnos"/>:
+                                            <t:select t:id="timVozacaUnos" validate="required"
+                                                      encoder="encoderTima" model="timoviSezoneUnosVozaca"/>
+                                        </p:timid>
+                                        <p:drzid>
+                                            <t:label for="drzavaVozaca"/>:
+                                            <t:select t:id="drzavaVozaca" validate="required"
+                                                      encoder="encoderDrzave" model="drzave"/>
+                                        </p:drzid>
+                                        <t:errors/>            
+                                    </t:beaneditform>
+                                </t:zone>
+                                <t:actionlink t:id="resetVozaca" class="btn btn-primary btn-large"
+                                t:zone="zonaFormeUnosIzmenaVozaca">
+                                    ${message:reset-label}
+                                </t:actionlink>
+                            </t:if>
+                            <t:if test="UnosFormaTim">
+                                <t:zone t:id="zonaFormeUnosIzmenaTima">
+                                    <t:beaneditform t:id="unosIzmenaTima" object="tim" exclude="id"
+                                                    reorder="nazivTima, logoTima, drzid, pozicija, bodovi"
+                                                    add="pozicija, bodovi, drzid" submitlabel="message:submit-label-tim">
+                                        <p:pozicija>
+                                            <t:label for="pozicijaTimaUnos"/>:
+                                            <t:Textfield t:id="pozicijaTimaUnos" validate="required"/>
+                                        </p:pozicija>
+                                        <p:bodovi>
+                                            <t:label for="bodoviTimaUnos"/>:
+                                            <t:Textfield t:id="bodoviTimaUnos" validate="required"/>
+                                        </p:bodovi>
+                                        <p:drzid>
+                                            <t:label for="drzavaTima"/>:
+                                            <t:select t:id="drzavaTima" validate="required"
+                                                      encoder="encoderDrzave" model="drzave"/>
+                                        </p:drzid>
+                                        <t:errors/>            
+                                    </t:beaneditform>
+                                </t:zone>
+                                <t:actionlink t:id="resetTima" class="btn btn-primary btn-large"
+                                t:zone="zonaFormeUnosIzmenaTima">
+                                    ${message:reset-label}
+                                </t:actionlink>
+                            </t:if>
+                            <t:if test="UnosFormaVelikaNagrada">
+                                <t:zone t:id="zonaFormeUnosIzmenaVelikeNagrade">
+                                    <t:beaneditform t:id="unosIzmenaVelikeNagrade" object="velikaNagrada" exclude="id"
+                                                    reorder="nazivVn, datumPocetka, datumZavrsetka, vozid, drzid"
+                                                    add="vozid, drzid" submitlabel="message:submit-label-velikanagrada">
+                                        <p:vozid>
+                                            <t:label for="vozacVelikeNagradeUnos"/>:
+                                            <t:select t:id="vozacVelikeNagradeUnos" 
+                                                      encoder="encoderVozaca" model="vozaciSezone"/>
+                                        </p:vozid>
+                                        <p:drzid>
+                                            <t:label for="drzavaVelikeNagrade"/>:
+                                            <t:select t:id="drzavaVelikeNagrade" 
+                                                      encoder="encoderDrzave" model="drzave"/>
+                                        </p:drzid>
+                                        <t:errors/>            
+                                    </t:beaneditform>
+                                </t:zone>
+                                <t:actionlink t:id="resetVelikeNagrade" class="btn btn-primary btn-large"
+                                t:zone="zonaFormeUnosIzmenaVelikeNagrade">
+                                    ${message:reset-label}
+                                </t:actionlink>
+                            </t:if>
+                            <t:if test="UnosFormaTrening">
+                                <t:zone t:id="zonaFormeUnosIzmenaTreninga">
+                                    <t:beaneditform t:id="unosIzmenaTreninga" object="trening" exclude="id"
+                                                    reorder="nazivTreninga, vremeTreninga, sat, minut, vnid"
+                                                    add="sat, minut, vnid" submitlabel="message:submit-label-trening">
+                                        <p:sat>
+                                            <t:label for="satTreninga"/>
+                                            <t:Textfield t:id="satTreninga" value="satTre" validate="required,max=23,min=0"/>
+                                        </p:sat>
+                                        <p:minut>
+                                            <t:label for="minutTreninga"/>
+                                            <t:Textfield t:id="minutTreninga" value="minutTre" validate="required, max=59,min=0"/>
+                                        </p:minut>
+                                        <p:vnid>
+                                            <t:label for="velikaNagradaTreninga"/>:
+                                            <t:select t:id="velikaNagradaTreninga" validate="required"
+                                                      encoder="encoderVelikeNagrade" model="velikeNagradeSezone"/>
+                                        </p:vnid>
+                                        <t:errors/>            
+                                    </t:beaneditform>
+                                </t:zone>
+                                <t:actionlink t:id="resetTreninga" class="btn btn-primary btn-large"
+                                t:zone="zonaFormeUnosIzmenaTreninga">
+                                    ${message:reset-label}
+                                </t:actionlink>
+                            </t:if>
+                            <t:if test="UnosFormaKvalifikacije">
+                                <t:zone t:id="zonaFormeUnosIzmenaKvalifikacija">
+                                    <t:beaneditform t:id="unosIzmenaKvalifikacija" object="kvalifikacije" exclude="id"
+                                                    reorder="nazivKvalifikacija, vremeKvalifikacija, sat, minut, vnid"
+                                                    add="sat, minut, vnid" submitlabel="message:submit-label-kvalifikacije">
+                                        <p:sat>
+                                            <t:label for="satKvalifikacija"/>
+                                            <t:Textfield t:id="satKvalifikacija" value="satKv" validate="required,max=23,min=0"/>
+                                        </p:sat>
+                                        <p:minut>
+                                            <t:label for="minutKvalifikacija"/>
+                                            <t:Textfield t:id="minutKvalifikacija" value="minutKv" validate="required, max=59,min=0"/>
+                                        </p:minut>
+                                        <p:vnid>
+                                            <t:label for="velikaNagradaKvalifikacija"/>:
+                                            <t:select t:id="velikaNagradaKvalifikacija" validate="required"
+                                                      encoder="encoderVelikeNagrade" model="velikeNagradeSezone"/>
+                                        </p:vnid>
+                                        <t:errors/>            
+                                    </t:beaneditform>
+                                </t:zone>
+                                <t:actionlink t:id="resetKvalifikacija" class="btn btn-primary btn-large"
+                                t:zone="zonaFormeUnosIzmenaKvalifikacija">
+                                    ${message:reset-label}
+                                </t:actionlink>
+                            </t:if>
+                            <t:if test="UnosFormaTrka">
+                                <t:zone t:id="zonaFormeUnosIzmenaTrke">
+                                    <t:beaneditform t:id="unosIzmenaTrke" object="trka" exclude="id"
+                                                    reorder="nazivTrke, najbrziKrug, vremeTrke, sat, minut, vnid"
+                                                    add="sat, minut, vnid" submitlabel="message:submit-label-trka">
+                                        <p:sat>
+                                            <t:label for="satTrke"/>
+                                            <t:Textfield t:id="satTrke" value="satTrk" validate="required,max=23,min=0"/>
+                                        </p:sat>
+                                        <p:minut>
+                                            <t:label for="minutTrke"/>
+                                            <t:Textfield t:id="minutTrke" value="minutTrk" validate="required, max=59,min=0"/>
+                                        </p:minut>
+                                        <p:vnid>
+                                            <t:label for="velikaNagradaTrke"/>:
+                                            <t:select t:id="velikaNagradaTrke" validate="required"
+                                                      encoder="encoderVelikeNagrade" model="velikeNagradeSezone"/>
+                                        </p:vnid>
+                                        <t:errors/>            
+                                    </t:beaneditform>
+                                </t:zone>
+                                <t:actionlink t:id="resetTrke" class="btn btn-primary btn-large"
+                                t:zone="zonaFormeUnosIzmenaTrke">
+                                    ${message:reset-label}
+                                </t:actionlink>
+                            </t:if>
+                            <t:if test="UnosFormaPozicioniRezultat">
+                                <t:zone t:id="zonaFormeIzborPozicioniRezultatUnos">
+                                    <t:form t:id="izborPozicioniRezultatUnos" t:zone="zonaUnosaPozicionogRezultata">
+                                        <t:label for="izborVelikeNagradePR"/>    
+                                        <t:select t:id="izborVelikeNagradePR" t:model="velikeNagradeSezone" 
+                                                  encoder="encoderVelikeNagrade" validate="required"/>
+                                        <t:RadioGroup value="treningIliKvalifikacijeRezultat" validate="required">
+                                            <t:Radio t:id="radioT" value="literal:T" label="message:izborTK-trening-label" type="radio" name="group"/><t:label for="radioT"/><br/>
+                                            <t:Radio t:id="radioK" value="literal:K" label="message:izborTK-kvalifikacije-label" type="radio" name="group"/><t:label for="radioK"/><br/>
+                                        </t:RadioGroup>
+                                        <t:submit class="btn btn-large btn-primary" value="message:izaberi-podatke-label"/>
+                                    </t:form>
+                                </t:zone>
+                                <t:zone t:id="zonaUnosaPozicionogRezultata">
+                                    <t:if test="UnosPozicionogRezultata">
+                                        <t:zone t:id="zonaFormeUnosIzmenaPozicionogRezultata">
+                                            <t:if test="UnosTreningRezultata">
+                                                <t:beaneditform t:id="unosIzmenaTreningRezultata" object="pozicioniRezultat" exclude="id"
+                                                        reorder="vozid, pozicijaPr, vremeRezultata, treid"
+                                                        add="vozid, treid" submitlabel="message:submit-label-pozicioniRezultat">
+                                                    <p:vozid>
+                                                        <t:label for="vozacTreningRezultata"/>:
+                                                        <t:select t:id="vozacTreningRezultata" validate="required"
+                                                                  encoder="encoderVozaca" model="vozaciSezone"/>
+                                                    </p:vozid>
+                                                    <p:treid>
+                                                        <t:label for="treningVelikeNagrade"/>:
+                                                        <t:select t:id="treningVelikeNagrade" validate="required"
+                                                                  encoder="encoderTreninga" model="treninziVelikeNagradeUnos"/>
+                                                    </p:treid>
+                                                    <t:errors/>            
+                                                </t:beaneditform>
+                                            </t:if>
+                                            <t:if test="!UnosTreningRezultata">
+                                                <t:beaneditform t:id="unosIzmenaKvalifikacionogRezultata" object="pozicioniRezultat" exclude="id"
+                                                        reorder="vozid, pozicijaPr, vremeRezultata, kvaid"
+                                                        add="vozid, kvaid" submitlabel="message:submit-label-pozicioniRezultat">
+                                                    <p:vozid>
+                                                        <t:label for="vozacKvalifikacionogRezultata"/>:
+                                                        <t:select t:id="vozacKvalifikacionogRezultata" validate="required"
+                                                                  encoder="encoderVozaca" model="vozaciSezone"/>
+                                                    </p:vozid>
+                                                    <p:kvaid>
+                                                        <t:label for="kvalifikacijeVelikeNagrade"/>:
+                                                        <t:select t:id="kvalifikacijeVelikeNagrade" validate="required"
+                                                                  encoder="encoderKvalifikacija" model="kvalifikacijeVelikeNagradeUnos"/>
+                                                    </p:kvaid>
+                                                    <t:errors/>            
+                                                </t:beaneditform>
+                                            </t:if>
+                                        </t:zone>
+                                        <t:actionlink t:id="resetPozicionogRezultata"
+                                                      class="btn btn-primary btn-large"
+                                        t:zone="zonaFormeUnosIzmenaPozicionogRezultata">
+                                            ${message:reset-label}
+                                        </t:actionlink>
+                                    </t:if>
+                                </t:zone>
+                            </t:if>
+                            <t:if test="UnosFormaRezultatTrke">
+                                <t:zone t:id="zonaFormeIzborTrkackiRezultatUnos">
+                                    <t:form t:id="izborTrkackiRezultatUnos" t:zone="zonaFormeUnosIzmenaTrkackogRezultata">
+                                        <t:label for="izborVelikeNagradeTR"/>    
+                                        <t:select t:id="izborVelikeNagradeTR" t:model="velikeNagradeSezone" 
+                                                  encoder="encoderVelikeNagrade" validate="required" onchange="this.form.submit()"/>
+                                        <t:submit class="btn btn-large btn-primary" value="message:izaberi-podatke-label"/>
+                                    </t:form>
+                                </t:zone>
+                                <t:if test="UnosTrkackogRezultata">
+                                    <t:zone t:id="zonaFormeUnosIzmenaTrkackogRezultata">
+                                        <t:beaneditform t:id="unosIzmenaTrkackogRezultata" 
+                                                object="trkackiRezultat" exclude="id"
+                                                reorder="vozid, pozicijaTr, ostvareniRezultat, trkid"
+                                                add="vozid, trkid" submitlabel="message:submit-label-trkackiRezultat">
+                                            <p:vozid>
+                                                <t:label for="vozacTrkackogRezultata"/>:
+                                                <t:select t:id="vozacTrkackogRezultata" validate="required"
+                                                          encoder="encoderVozaca" model="vozaciSezone"/>
+                                            </p:vozid>
+                                            <p:trkid>
+                                                <t:label for="trkaVelikeNagrade"/>:
+                                                <t:select t:id="trkaVelikeNagrade" validate="required"
+                                                          encoder="encoderTrka" model="trkeVelikeNagradeUnos"/>
+                                            </p:trkid>
+                                            <t:errors/>            
+                                        </t:beaneditform>
+                                    </t:zone>
+                                    <t:actionlink t:id="resetTrkackogRezultata" 
+                                                  class="btn btn-primary btn-large"
+                                    t:zone="zonaFormeUnosIzmenaTrkackogRezultata">
+                                        ${message:reset-label}
+                                    </t:actionlink>
+                                </t:if>
+                            </t:if>
+                            <t:if test="IzmenaFormaKlasifikacijaVozac">
+                                <t:zone t:id="zonaFormeIzmenaKlasifikacijeVozaca">
+                                    <t:beaneditform t:id="izmenaKlasifikacijeVozaca" 
+                                                    object="klasifikacijaVozac" exclude="id"
+                                                    reorder="pozicijaK, bodovi" 
+                                                    submitlabel="message:submit-label-vozac-klasifikacija">
+                                        <t:errors/>            
+                                    </t:beaneditform>
+                                </t:zone>
+                            </t:if>
+                            <t:if test="IzmenaFormaKlasifikacijaTim">
+                                <t:zone t:id="zonaFormeIzmenaKlasifikacijeTima">
+                                    <t:beaneditform t:id="izmenaKlasifikacijeTima" 
+                                                    object="klasifikacijaTim" exclude="id"
+                                                    reorder="pozicijaK, bodovi" submitlabel="message:submit-label-tim-klasifikacija">
+                                        <t:errors/>            
+                                    </t:beaneditform>
+                                </t:zone>
+                            </t:if>
+                        </t:zone>
+                    </t:if>
+                </div>
+                <div class="col-sm-8 col-md-8 col-lg-9"> 
+                    <t:zone t:id="zonaFormeIzborPodatakaPrikaz">
+                        <t:form t:id="izborPodatakaPrikaz" t:zone="zonaPrikazaTabelePodataka">
+                            <t:label for="izborKategorijePrikaz"/>    
+                            <t:select t:id="izborKategorijePrikaz" t:model="kategorijePrikaz" onchange="this.form.submit()"
+                                      encoder="encoderKategorije" t:value="vrednostKategorijePrikaz" label="message:izborKategorije-label" />
+                            <t:label for="izborSezonePrikaz"/>
+                            <t:select t:id="izborSezonePrikaz" t:model="sezonePrikaz" onchange="this.form.submit()"
+                                      encoder="encoderSezone" t:value="vrednostSezonePrikaz" label="message:izborSezone-label"/>
+                            <t:label for="tipovi"/>
+                            <t:select t:id="tipoviPodatakaPrikaz" label="message:izborTipa-label" onchange="this.form.submit()"/>
+                        </t:form>
+                    </t:zone>
+                    <t:if test="prikazTabelePodataka">
+                        <t:zone t:id="zonaPrikazaTabelePodataka">
+                            <t:if test="PrikazTabeleVozac">
+                                <t:zone t:id="zonaVozaciPrikaz">
+                                    <t:jquery.datatable t:source="vozaciPrikaz" t:options="options" 
+                                                        add="editvozac, deletevozac, pozicija, bodovi, tim, drzava" 
+                                                        row="redvozac" exclude="id" 
+                                            reorder="imeVozaca, prezimeVozaca, drzava, tim, broj, datumRodjenja, slika, pozicija, bodovi">   
+                                        <p:editvozacCell>
+                                            <t:actionlink t:id="editvozac" context="redvozac"
+                                            t:zone="zonaFormeUnosIzmenaVozaca">
+                                                ${message:izmeni}
+                                            </t:actionlink>
+                                        </p:editvozacCell>
+                                        <p:deletevozacCell>
+                                            <t:actionlink t:id="deletevozac" context="redvozac.id" 
+                                            t:title="message:potvrdaBrisanja-label" 
+                                            t:message="${message:potvrdaBrisanjaVozaca-label}
+                                            ${redvozac.imeVozaca} ${redvozac.prezimeVozaca}"
+                                            t:mixins="Confirm" t:zone="zonaVozaciPrikaz">
+                                                ${message:obrisi}
+                                            </t:actionlink>
+                                        </p:deletevozacCell>
+                                        <p:bodoviCell>
+                                            ${BodoviPrikaz}
+                                        </p:bodoviCell>
+                                        <p:pozicijaCell>
+                                            ${PozicijaPrikaz}
+                                        </p:pozicijaCell>
+                                        <p:timCell>
+                                            ${TimPrikaz}
+                                        </p:timCell>
+                                        <p:drzavaCell>
+                                            ${DrzavaPrikaz}
+                                        </p:drzavaCell>
+                                    </t:jquery.datatable>
+                                </t:zone>
+                            </t:if>
+                            <t:if test="PrikazTabeleTim">
+                                <t:zone t:id="zonaTimoviPrikaz">
+                                    <t:jquery.datatable t:source="timoviPrikaz" 
+                                            t:options="options" add="edittim, deletetim, pozicija, bodovi, drzava" row="redtim"
+                                            exclude="id" reorder="nazivTima, logoTima, drzava, pozicija, bodovi">   
+                                        <p:edittimCell>
+                                            <t:actionlink t:id="edittim" context="redtim"
+                                            t:zone="zonaFormeUnosIzmenaTima">
+                                                ${message:izmeni}
+                                            </t:actionlink>
+                                        </p:edittimCell>
+                                        <p:deletetimCell>
+                                            <t:actionlink t:id="deletetim" context="redtim.id" 
+                                            t:title="message:potvrdaBrisanja-label" 
+                                            t:message="${message:potvrdaBrisanjaTima-label}
+                                            ${redtim.nazivTima}" t:mixins="Confirm"
+                                            t:zone="zonaTimoviPrikaz">
+                                                ${message:obrisi}
+                                            </t:actionlink>
+                                        </p:deletetimCell>
+                                        <p:bodoviCell>
+                                            ${BodoviTimaPrikaz}
+                                        </p:bodoviCell>
+                                        <p:pozicijaCell>
+                                            ${PozicijaTimaPrikaz}
+                                        </p:pozicijaCell>
+                                        <p:drzavaCell>
+                                            ${DrzavaTimaPrikaz}
+                                        </p:drzavaCell>
+                                    </t:jquery.datatable>
+                                </t:zone>
+                            </t:if>
+                            <t:if test="PrikazTabeleVelikaNagrada">
+                                <t:zone t:id="zonaVelikeNagradePrikaz">
+                                    <t:jquery.datatable t:source="velikeNagradePrikaz"
+                                            t:options="options" add="editvn, deletevn, vozac, drzava" row="redvn"
+                                            exclude="id" reorder="nazivVn, datumPocetka, datumZavrsetka, vozac, drzava">   
+                                        <p:editvnCell>
+                                            <t:actionlink t:id="editvn" context="redvn"
+                                            t:zone="zonaFormeUnosIzmenaVelikeNagrade">
+                                                ${message:izmeni}
+                                            </t:actionlink>
+                                        </p:editvnCell>
+                                        <p:deletevnCell>
+                                            <t:actionlink t:id="deletevn" context="redvn.id" 
+                                            t:title="message:potvrdaBrisanja-label" 
+                                            t:message="${message:potvrdaBrisanjaVN-label}
+                                            ${redvn.nazivVn}" t:mixins="Confirm"
+                                            t:zone="zonaVelikeNagradePrikaz">
+                                                ${message:obrisi}
+                                            </t:actionlink>
+                                        </p:deletevnCell>
+                                        <p:vozacCell>
+                                            ${PobednikVelikeNagradePrikaz}
+                                        </p:vozacCell>
+                                        <p:drzavaCell>
+                                            ${DrzavaVelikeNagradePrikaz}
+                                        </p:drzavaCell>
+                                    </t:jquery.datatable>
+                                </t:zone>
+                            </t:if>
+                            <t:if test="PrikazTabeleTrening">
+                                <t:zone t:id="zonaTreninziPrikaz">
+                                    <t:jquery.datatable t:source="treninziPrikaz" 
+                                            t:options="options" add="edittrening, deletetrening, vntrening" row="redtrening"
+                                            exclude="id" reorder="nazivTreninga, vremeTreninga, vntrening">   
+                                        <p:edittreningCell>
+                                            <t:actionlink t:id="edittrening" context="redtrening"
+                                            t:zone="zonaFormeUnosIzmenaTreninga">
+                                                ${message:izmeni}
+                                            </t:actionlink>
+                                        </p:edittreningCell>
+                                        <p:deletetreningCell>
+                                            <t:actionlink t:id="deletetrening" context="redtrening.id"
+                                            t:title="message:potvrdaBrisanja-label" 
+                                            t:message="${message:potvrdaBrisanjaTreninga-label}
+                                            ${redtrening.nazivTreninga}" t:mixins="Confirm"
+                                            t:zone="zonaTreninziPrikaz">
+                                                ${message:obrisi}
+                                            </t:actionlink>
+                                        </p:deletetreningCell>
+                                        <p:vntreningCell>
+                                            ${VelikaNagradaTreningaPrikaz}
+                                        </p:vntreningCell>
+                                    </t:jquery.datatable>
+                                </t:zone>
+                            </t:if>
+                            <t:if test="PrikazTabeleKvalifikacije">
+                                <t:zone t:id="zonaKvalifikacijePrikaz">
+                                    <t:jquery.datatable t:source="kvalifikacijePrikaz" 
+                                            t:options="options" add="editkvalifikacija, deletekvalifikacija, vnkvalifikacija" row="redkvalifikacije"
+                                            exclude="id" reorder="nazivKvalifikacija, vremeKvalifikacija, vnkvalifikacija">   
+                                        <p:editkvalifikacijaCell>
+                                            <t:actionlink t:id="editkvalifikacija" context="redkvalifikacije"
+                                            t:zone="zonaFormeUnosIzmenaKvalifikacija">
+                                                ${message:izmeni}
+                                            </t:actionlink>
+                                        </p:editkvalifikacijaCell>
+                                        <p:deletekvalifikacijaCell>
+                                            <t:actionlink t:id="deletekvalifikacija" context="redkvalifikacije.id" 
+                                            t:title="message:potvrdaBrisanja-label" 
+                                            t:message="${message:potvrdaBrisanjaKvalifikacija-label}
+                                            ${redkvalifikacije.nazivKvalifikacija}" t:mixins="Confirm"
+                                            t:zone="zonaKvalifikacijePrikaz">
+                                                ${message:obrisi}
+                                            </t:actionlink>
+                                        </p:deletekvalifikacijaCell>
+                                        <p:vnkvalifikacijaCell>
+                                            ${VelikaNagradaKvalifikacijaPrikaz}
+                                        </p:vnkvalifikacijaCell>
+                                    </t:jquery.datatable>
+                                </t:zone>
+                            </t:if>
+                            <t:if test="PrikazTabeleTrka">
+                                <t:zone t:id="zonaTrkePrikaz">
+                                    <t:jquery.datatable t:source="trkePrikaz" 
+                                            t:options="options" add="edittrka, deletetrka, vntrka" row="redtrka"
+                                            exclude="id" reorder="nazivTrke, najbrziKrug, vremeTrke, vntrka">   
+                                        <p:edittrkaCell>
+                                            <t:actionlink t:id="edittrka" context="redtrka"
+                                            t:zone="zonaFormeUnosIzmenaTrke">
+                                                ${message:izmeni}
+                                            </t:actionlink>
+                                        </p:edittrkaCell>
+                                        <p:deletetrkaCell>
+                                            <t:actionlink t:id="deletetrka" context="redtrka.id" 
+                                            t:title="message:potvrdaBrisanja-label" 
+                                            t:message="${message:potvrdaBrisanjaTrka-label}
+                                            ${redtrka.nazivTrke}" t:mixins="Confirm"
+                                            t:zone="zonaTrkePrikaz">
+                                                ${message:obrisi}
+                                            </t:actionlink>
+                                        </p:deletetrkaCell>
+                                        <p:vntrkaCell>
+                                            ${VelikaNagradaTrkaPrikaz}
+                                        </p:vntrkaCell>
+                                    </t:jquery.datatable>
+                                </t:zone>
+                            </t:if>
+                            <t:if test="PrikazTabelePozicioniRezultat">
+                                <t:zone t:id="zonaFormeIzborPozicioniRezultatPrikaz">
+                                    <t:form t:id="izborPozicioniRezultatPrikaz" 
+                                    t:zone="zonaPozicioniRezultatPrikaz">
+                                        <t:label for="izborVelikeNagradePRprikaz"/>    
+                                        <t:select t:id="izborVelikeNagradePRprikaz" t:model="velikeNagradePrikaz" 
+                                                  encoder="encoderVelikeNagrade" onchange="this.form.submit()"/>
+                                            <t:label for="treningVelikeNagradePRprikaz"/>    
+                                            <t:select t:id="treningVelikeNagradePRprikaz" t:model="treninziVelikeNagradePrikaz" 
+                                                      encoder="encoderTreninga" onchange="this.form.submit()"/>
+                                            <t:label for="kvalifikacijaVelikeNagradePRprikaz"/>    
+                                            <t:select t:id="kvalifikacijaVelikeNagradePRprikaz" t:model="kvalifikacijeVelikeNagradePrikaz" 
+                                                      encoder="encoderKvalifikacija" onchange="this.form.submit()"/>
+                                    </t:form>
+                                </t:zone>
+                                <t:if test="PrikazPozicionogRezultata">
+                                    <t:zone t:id="zonaPozicioniRezultatPrikaz">
+                                        <t:jquery.datatable t:source="pozicioniRezultatPrikaz"
+                                                t:options="options" add="editpr, deletepr, vozacpr" row="redpr"
+                                                exclude="id" reorder="vozacpr, vremeRezultata, pozicijaPr">   
+                                            <p:editprCell>
+                                                <t:actionlink t:id="editpr" context="redpr"
+                                                t:zone="zonaFormeUnosIzmenaPozicionogRezultata">
+                                                    ${message:izmeni}
+                                                </t:actionlink>
+                                            </p:editprCell>
+                                            <p:deleteprCell>
+                                                <t:actionlink t:id="deletepr" context="redpr.id" 
+                                                t:title="message:potvrdaBrisanja-label" 
+                                                t:message="${message:potvrdaBrisanjaPR-label}
+                                                ${redpr}" t:mixins="Confirm"
+                                                t:zone="zonaPozicioniRezultatPrikaz">
+                                                    ${message:obrisi}
+                                                </t:actionlink>
+                                            </p:deleteprCell>
+                                            <p:vozacprCell>
+                                                ${VozacPozicionogRezultataPrikaz}
+                                            </p:vozacprCell>
+                                        </t:jquery.datatable>
+                                    </t:zone>
+                                </t:if>
+                            </t:if>
+                            <t:if test="PrikazTabeleRezultatTrke">
+                                <t:zone t:id="zonaFormeIzborTrkackiRezultatPrikaz">
+                                    <t:form t:id="izborTrkackiRezultatPrikaz" t:zone="zonaTrkackiRezultatPrikaz">
+                                        <t:label for="izborVelikeNagradeTRprikaz"/>    
+                                        <t:select t:id="izborVelikeNagradeTRprikaz" t:model="velikeNagradePrikaz" 
+                                                  encoder="encoderVelikeNagrade" onchange="this.form.submit()"/>
+                                            <t:label for="trkaVelikeNagradeTRprikaz"/>    
+                                            <t:select t:id="trkaVelikeNagradeTRprikaz" t:model="trkeVelikeNagradePrikaz" 
+                                                      encoder="encoderTrka" onchange="this.form.submit()"/>
+                                    </t:form>
+                                </t:zone>
+                                <t:if test="PrikazTrkackogRezultata">
+                                    <t:zone t:id="zonaTrkackiRezultatPrikaz">
+                                        <t:jquery.datatable t:source="trkackiRezultatPrikaz" 
+                                                t:options="options" add="edittr, deletetr, vozactr" row="redtr"
+                                                exclude="id" reorder="vozactr, ostvareniRezultat, pozicijaTr">   
+                                            <p:edittrCell>
+                                                <t:actionlink t:id="edittr" context="redtr"
+                                                t:zone="zonaFormeUnosIzmenaTrkackogRezultata">
+                                                    ${message:izmeni}
+                                                </t:actionlink>
+                                            </p:edittrCell>
+                                            <p:deletetrCell>
+                                                <t:actionlink t:id="deletetr" context="redtr.id" 
+                                                t:title="message:potvrdaBrisanja-label"
+                                                t:message="${message:potvrdaBrisanjaTR-label} 
+                                                ${redtr}" t:mixins="Confirm"
+                                                t:zone="zonaTrkackiRezultatPrikaz">
+                                                    ${message:obrisi}
+                                                </t:actionlink>
+                                            </p:deletetrCell>
+                                            <p:vozactrCell>
+                                                ${VozacTrkackogRezultataPrikaz}
+                                            </p:vozactrCell>
+                                        </t:jquery.datatable>
+                                    </t:zone>
+                                </t:if>
+                            </t:if>
+                            <t:if test="PrikazKlasifikacijeVozaca">
+                                <t:zone t:id="zonaKlasifikacijaVozacaPrikaz">
+                                    <t:jquery.datatable t:source="klasifikacijaVozacaPrikaz" 
+                                            t:options="options" add="editklv, vozacklv" row="redklv"
+                                            exclude="id" reorder="vozacklv, pozicijaK, bodovi, editklv">   
+                                        <p:editklvCell>
+                                            <t:actionlink t:id="editklv" context="redklv"
+                                            t:zone="zonaFormeIzmenaKlasifikacijeVozaca">
+                                                ${message:izmeni}
+                                            </t:actionlink>
+                                        </p:editklvCell>
+                                        <p:vozacklvCell>
+                                            ${VozacKlasifikacijaPrikaz}
+                                        </p:vozacklvCell>
+                                    </t:jquery.datatable>
+                                </t:zone>
+                            </t:if>
+                            <t:if test="PrikazKlasifikacijeTimova">
+                                <t:zone t:id="zonaKlasifikacijaTimaPrikaz">
+                                    <t:jquery.datatable t:source="klasifikacijaTimaPrikaz" 
+                                            t:options="options" add="editklt, timklt" row="redklt"
+                                            exclude="id" reorder="timklt, pozicijaK, bodovi, editklt">   
+                                        <p:editkltCell>
+                                            <t:actionlink t:id="editklt" context="redklt"
+                                            t:zone="zonaFormeIzmenaKlasifikacijeTima">
+                                                ${message:izmeni}
+                                            </t:actionlink>
+                                        </p:editkltCell>
+                                        <p:timkltCell>
+                                            ${TimKlasifikacijaPrikaz}
+                                        </p:timkltCell>
+                                    </t:jquery.datatable>
+                                </t:zone>
+                            </t:if>
+                        </t:zone>
+                    </t:if>
+                </div>
+            </div>
+        </t:if>
+        <t:if test="prikazDiskusionihGrupa">
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-3">  
+                    <t:zone t:id="zonaFormeUnosIzmenaDiskusioneGrupe">
+                        <t:beaneditform t:id="unosIzmenaDiskusioneGrupe" object="dgrupa" 
+                                        exclude="id" reorder="nazivDg, opisDg, katid"
+                                        add="katid" submitlabel="message:submit-label-diskusiona-grupa">
+                            <p:katid>
+                                <t:label for="kategorijaDg"/>:
+                                <t:select t:id="kategorijaDg" validate="required"
+                                          encoder="encoderKategorije" model="kategorije"/>
+                            </p:katid>
+                            <t:errors/>            
+                        </t:beaneditform>
+                    </t:zone> 
+                    <t:actionlink t:id="resetDg" class="btn btn-primary btn-large"
+                    t:zone="zonaFormeUnosIzmenaDiskusioneGrupe">
+                        ${message:reset-label}
+                    </t:actionlink>   
+                </div>
+                <div class="col-sm-8 col-md-8 col-lg-9"> 
+                    <t:zone t:id="zonaFormeIzborKategorijeDiskusioneGrupe">
+                        <t:form t:id="izborKategorijeDiskusioneGrupe" t:zone="zonaDgrupePrikaz">
+                            <t:label for="izborKategorijeDg"/>    
+                            <t:select t:id="izborKategorijeDg" t:model="kategorije" onchange="this.form.submit()"
+                                    encoder="encoderKategorije" label="message:izborKategorijeDg-label"/>
+                        </t:form>
+                    </t:zone>
+                    <t:if test="PrikazTabelaDg">
+                        <t:zone t:id="zonaDgrupePrikaz">
+                            <t:jquery.datatable t:source="dgrupe" t:options="options" 
+                                    add="editdg, deletedg, izaberidg" row="reddg"
+                                    exclude="id" reorder="nazivDg, opisDg, editdg, deletedg, izaberidg">   
+                                <p:editdgCell>
+                                    <t:actionlink t:id="editdg" context="reddg"
+                                    t:zone="zonaFormeUnosIzmenaDiskusioneGrupe">
+                                        ${message:izmeni}
+                                    </t:actionlink>
+                                </p:editdgCell>
+                                <p:deletedgCell>
+                                    <t:actionlink t:id="deletedg" context="reddg.id" 
+                                    t:title="message:potvrdaBrisanja-label" 
+                                    t:message="${message:potvrdaBrisanjaDG-label}
+                                    ${reddg.nazivDg}" t:mixins="Confirm" t:zone="zonaDgrupePrikaz">
+                                        ${message:obrisi}
+                                    </t:actionlink>
+                                </p:deletedgCell>
+                                <p:izaberidgCell>
+                                    <t:actionlink t:id="izaberidg" context="reddg">
+                                    <!--t:zone="zonaPrikazTabelaDiskusije">-->
+                                        ${message:izaberi}
+                                    </t:actionlink>
+                                </p:izaberidgCell>
+                            </t:jquery.datatable>
+                        </t:zone>
+                        <t:zone t:id="zonaPrikazTabelaDiskusije">
+                            <t:if test="PrikazTabelaDiskusije">
+                                <t:zone t:id="zonaPrikazTabelaDiskusije2">
+                                <div class="row centartekst">${IzabranaDiskusionaGrupa}</div>
+                                <t:jquery.datatable t:source="diskusije" t:options="options" 
+                                        add="deletediskusija" row="reddiskusija"
+                                        exclude="id, opisDiskusije" reorder="naslovDiskusije, vremeOtvaranja, deletediskusija">   
+                                    <p:deletediskusijaCell>
+                                        <t:actionlink t:id="deletediskusija" context="reddiskusija.id" 
+                                        t:title="message:potvrdaBrisanja-label" 
+                                        t:message="${message:potvrdaBrisanjaDiskusije-label} 
+                                        ${reddiskusija.naslovDiskusije}" t:mixins="Confirm"
+                                        t:zone="zonaPrikazTabelaDiskusije">
+                                            ${message:obrisi}
+                                        </t:actionlink>
+                                    </p:deletediskusijaCell>
+                                </t:jquery.datatable>
+                                <t:actionlink t:id="resetDiskusijaPrikaz" 
+                                              class="btn btn-primary btn-large"
+                                t:zone="zonaPrikazTabelaDiskusije">
+                                    ${message:resetDiskusija-label}
+                                </t:actionlink>
+                                </t:zone>
+                            </t:if>
+                        </t:zone>
+                    </t:if>
+                </div>
+            </div>
+        </t:if>
+        <t:if test="prikazOstalog">
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-3">  
+                    <t:zone t:id="zonaFormeUnosIzmenaDrzave">
+                        <t:beaneditform t:id="unosIzmenaDrzave" object="drzava" exclude="id"
+                                        submitlabel="message:submit-label-drzava">
+                            <t:errors/>            
+                        </t:beaneditform> 
+                    </t:zone>
+                    <t:actionlink t:id="resetDrzava" t:zone="zonaFormeUnosIzmenaDrzave" 
+                                  class="btn btn-primary btn-large">
+                        ${message:reset-label}
+                    </t:actionlink>   
+                </div>
+                <div class="col-sm-8 col-md-8 col-lg-9"> 
+                    <t:zone t:id="zonaGridaDrzava">
+                        <t:jquery.datatable t:source="drzave" t:options="options" 
+                            exclude="id" add="editdrzava, deletedrzava" row="reddrzava">
+                            <p:editdrzavaCell>
+                                <t:actionlink t:id="editdrzava" t:zone="zonaFormeUnosIzmenaDrzave" 
+                                              context="reddrzava">
+                                    ${message:izmeni}
+                                </t:actionlink>
+                            </p:editdrzavaCell>
+                            <p:deletedrzavaCell>
+                                <t:actionlink t:id="deletedrzava" context="reddrzava.id" 
+                                t:title="message:potvrdaBrisanja-label" t:zone="zonaGridaDrzava"
+                                t:message="${message:potvrdaBrisanjaDrzave-label} 
+                                ${reddrzava.nazivDrzave}" t:mixins="Confirm">
+                                    ${message:obrisi}
+                                </t:actionlink>
+                            </p:deletedrzavaCell>
+                        </t:jquery.datatable>
+                    </t:zone>
+                </div>
+            </div>
+        </t:if>
+    </t:zone>
+    
 </html>

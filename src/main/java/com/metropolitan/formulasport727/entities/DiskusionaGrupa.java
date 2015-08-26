@@ -16,9 +16,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Diskusiona Grupa iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -29,9 +31,11 @@ public class DiskusionaGrupa extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "NAZIV_DG")
+    @Validate("required")
     private String nazivDg;
     @Basic(optional = false)
     @Column(name = "OPIS_DG")
+    @Validate("required")
     private String opisDg;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "disId")
     private List<Diskusija> diskusijaList;
@@ -39,6 +43,7 @@ public class DiskusionaGrupa extends AbstraktniEntitet {
     @ManyToOne(optional = false)
     private Kategorija katId;
 
+    @Inject
     public DiskusionaGrupa() {
     }
 
@@ -114,7 +119,7 @@ public class DiskusionaGrupa extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Diskusiona grupa: " + getNazivDg();
+        return getNazivDg();
     }
     
 }

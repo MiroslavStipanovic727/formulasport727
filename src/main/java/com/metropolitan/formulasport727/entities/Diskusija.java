@@ -20,9 +20,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Diskusija iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -33,15 +35,22 @@ public class Diskusija extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "NASLOV_DISKUSIJE")
+    @Validate("required")
     private String naslovDiskusije;
     @Basic(optional = false)
     @Lob
     @Column(name = "OPIS_DISKUSIJE")
+    @Validate("required")
     private String opisDiskusije;
     @Basic(optional = false)
     @Column(name = "VREME_OTVARANJA")
     @Temporal(TemporalType.TIMESTAMP)
+    @Validate("required")
     private Date vremeOtvaranja;
+    @Basic(optional = false)
+    @Column(name = "ODOBRENA")
+    @Validate("required")
+    private boolean odobrena;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "disId")
     private List<KomentarDiskusije> komentarDiskusijeList;
     @JoinColumn(name = "KOR_ID", referencedColumnName = "ID")
@@ -51,6 +60,7 @@ public class Diskusija extends AbstraktniEntitet {
     @ManyToOne(optional = false)
     private DiskusionaGrupa disId;
 
+    @Inject
     public Diskusija() {
     }
 
@@ -58,11 +68,12 @@ public class Diskusija extends AbstraktniEntitet {
         this.id = id;
     }
 
-    public Diskusija(Long id, String naslovDiskusije, String opisDiskusije, Date vremeOtvaranja) {
+    public Diskusija(Long id, String naslovDiskusije, String opisDiskusije, Date vremeOtvaranja, boolean odobrena) {
         this.id = id;
         this.naslovDiskusije = naslovDiskusije;
         this.opisDiskusije = opisDiskusije;
         this.vremeOtvaranja = vremeOtvaranja;
+        this.odobrena = odobrena;
     }
 
     public Long getId() {
@@ -95,6 +106,14 @@ public class Diskusija extends AbstraktniEntitet {
 
     public void setVremeOtvaranja(Date vremeOtvaranja) {
         this.vremeOtvaranja = vremeOtvaranja;
+    }
+
+    public boolean isOdobrena() {
+        return odobrena;
+    }
+
+    public void setOdobrena(boolean odobrena) {
+        this.odobrena = odobrena;
     }
 
     public List<KomentarDiskusije> getKomentarDiskusijeList() {
@@ -143,7 +162,7 @@ public class Diskusija extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Diskusija: "+getNaslovDiskusije();
+        return getNaslovDiskusije();
     }
     
 }

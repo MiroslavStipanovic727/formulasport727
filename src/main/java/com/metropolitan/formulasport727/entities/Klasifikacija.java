@@ -16,9 +16,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Klasifikacija iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -29,9 +31,11 @@ public class Klasifikacija extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "POZICIJA_K")
+    @Validate("required")
     private int pozicijaK;
     @Basic(optional = false)
     @Column(name = "BODOVI")
+    @Validate("required")
     private double bodovi;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "klaId")
     private List<Tim> timList;
@@ -47,6 +51,7 @@ public class Klasifikacija extends AbstraktniEntitet {
     @ManyToOne(optional = false)
     private Sezona sezId;
 
+    @Inject
     public Klasifikacija() {
     }
 
@@ -146,7 +151,12 @@ public class Klasifikacija extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Klasifikacija: "+getId();
+        if(vozId!=null)
+            return "Vozač Klasifikacija: "+getId()+" bodovi:"+getBodovi()+" pozicija: "+getPozicijaK();
+        else if(timId!=null){
+            return "Tim Klasifikacija: "+getId()+" bodovi:"+getBodovi()+" pozicija: "+getPozicijaK();
+        }
+        return "Klasifikacija: "+getId()+" bodovi: "+getBodovi()+" pozicija: "+getPozicijaK();
     }
     
 }

@@ -16,9 +16,11 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Komentar Vesti iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -35,6 +37,7 @@ public class KomentarVesti extends AbstraktniEntitet {
     private String naslovKomentara;
     @Basic(optional = false)
     @Column(name = "TEKST_KOMENTARA")
+    @Validate("required")
     private String tekstKomentara;
     @JoinColumn(name = "VES_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
@@ -43,6 +46,7 @@ public class KomentarVesti extends AbstraktniEntitet {
     @ManyToOne(optional = false)
     private Korisnik korId;
 
+    @Inject
     public KomentarVesti() {
     }
 

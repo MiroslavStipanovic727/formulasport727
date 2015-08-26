@@ -5,20 +5,25 @@
  */
 package com.metropolitan.formulasport727.entities;
 
+import com.metropolitan.formulasport727.data.Uloga;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Korisnik iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -29,11 +34,14 @@ public class Korisnik extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "KORISNICKO_IME")
+    @Validate("required")
     private String korisnickoIme;
     @Basic(optional = false)
     @Column(name = "SIFRA")
+    @Validate("required")
     private String sifra;
     @Basic(optional = false)
+    @Validate("required")
     @Column(name = "EMAIL")
     private String email;
     @Column(name = "LOKACIJA")
@@ -44,7 +52,9 @@ public class Korisnik extends AbstraktniEntitet {
     private String prezimeKorisnika;
     @Basic(optional = false)
     @Column(name = "ULOGA")
-    private String uloga;
+    @Enumerated(EnumType.STRING)
+    @Validate("required")
+    private Uloga uloga;
     @JoinColumn(name = "KAT_ID", referencedColumnName = "ID")
     @ManyToOne
     private Kategorija katId;
@@ -59,6 +69,7 @@ public class Korisnik extends AbstraktniEntitet {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "korId")
     private List<Vest> vestList;
 
+    @Inject
     public Korisnik() {
     }
 
@@ -66,7 +77,7 @@ public class Korisnik extends AbstraktniEntitet {
         this.id = id;
     }
 
-    public Korisnik(Long id, String korisnickoIme, String sifra, String email, String uloga) {
+    public Korisnik(Long id, String korisnickoIme, String sifra, String email, Uloga uloga) {
         this.id = id;
         this.korisnickoIme = korisnickoIme;
         this.sifra = sifra;
@@ -130,11 +141,11 @@ public class Korisnik extends AbstraktniEntitet {
         this.prezimeKorisnika = prezimeKorisnika;
     }
 
-    public String getUloga() {
+    public Uloga getUloga() {
         return uloga;
     }
 
-    public void setUloga(String uloga) {
+    public void setUloga(Uloga uloga) {
         this.uloga = uloga;
     }
 
@@ -208,7 +219,7 @@ public class Korisnik extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Korisnik: " + getEmail();
+        return getEmail();
     }
     
 }

@@ -16,9 +16,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Tim iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -29,6 +31,7 @@ public class Tim extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "NAZIV_TIMA")
+    @Validate("required")
     private String nazivTima;
     @Basic(optional = false)
     @Column(name = "LOGO_TIMA")
@@ -47,6 +50,7 @@ public class Tim extends AbstraktniEntitet {
     @OneToMany(mappedBy = "timId")
     private List<Klasifikacija> klasifikacijaList;
 
+    @Inject
     public Tim() {
     }
 
@@ -146,7 +150,7 @@ public class Tim extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Tim: " + getNazivTima();
+        return getNazivTima();
     }
     
 }

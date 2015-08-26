@@ -14,9 +14,10 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Tip Artikla iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -31,6 +32,7 @@ public class TipArtikla extends AbstraktniEntitet {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipId")
     private List<Artikal> artikalList;
 
+    @Inject
     public TipArtikla() {
     }
 
@@ -89,7 +91,7 @@ public class TipArtikla extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Tip Artikla: "+getNazivTipa();
+        return getNazivTipa();
     }
     
 }

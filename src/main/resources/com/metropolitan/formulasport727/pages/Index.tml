@@ -1,9 +1,274 @@
-<html t:type="layout" title="FormulaSport727 Vesti"
+<html t:type="layout" title="${message:naslov}"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
       xmlns:p="tapestry:parameter">
 
+    <t:zone t:id="zonaPoslednjihVesti">
+        <t:if test="!pretragaAktivirana">   
+        
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div id="slajdovi" class="carousel slide" data-ride="carousel">
 
+                            <ol class="carousel-indicators">
+                                <li data-target="#slajdovi" data-slide-to="0" class="active"></li>
+                                <li data-target="#slajdovi" data-slide-to="1"></li>
+                                <li data-target="#slajdovi" data-slide-to="2"></li>
+                                <li data-target="#slajdovi" data-slide-to="3"></li>
+                            </ol>
 
+                            <div class="carousel-inner" role="listbox">
+                                <div class="item active">
+                                    <img src="${poslednjaVest(0).slikaVesti}" alt="${poslednjaVest(0).naslovVesti}"/>
+                                    <div class="carousel-caption">
+                                        <h5>${poslednjaVest(0).katId.nazivKategorije} - <t:output format="format" value="poslednjaVest(0).vremeObjave"/></h5>
+                                        <h3>
+                                            <t:eventlink t:event="izaberiPoslednjuVest" 
+                                                         t:context="literal:0">
+                                                ${poslednjaVest(0).naslovVesti}
+                                            </t:eventlink>
+                                        </h3>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <img src="${poslednjaVest(1).slikaVesti}" alt="${poslednjaVest(1).naslovVesti}"/>
+                                    <div class="carousel-caption">
+                                        <h5>${poslednjaVest(1).katId.nazivKategorije} - <t:output format="format" value="poslednjaVest(1).vremeObjave"/></h5>
+                                        <h3>
+                                            <t:eventlink t:event="izaberiPoslednjuVest" 
+                                                         t:context="literal:1">
+                                                ${poslednjaVest(1).naslovVesti}
+                                            </t:eventlink>
+                                        </h3>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <img src="${poslednjaVest(2).slikaVesti}" alt="${poslednjaVest(2).naslovVesti}"/>
+                                    <div class="carousel-caption">
+                                        <h5>${poslednjaVest(2).katId.nazivKategorije} - <t:output format="format" value="poslednjaVest(2).vremeObjave"/></h5>
+                                        <h3>
+                                            <t:eventlink t:event="izaberiPoslednjuVest" 
+                                                         t:context="literal:2">
+                                                ${poslednjaVest(2).naslovVesti}
+                                            </t:eventlink>
+                                        </h3>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <img src="${poslednjaVest(3).slikaVesti}" alt="${poslednjaVest(3).naslovVesti}"/>
+                                    <div class="carousel-caption">
+                                        <h5>${poslednjaVest(3).katId.nazivKategorije} - <t:output format="format" value="poslednjaVest(3).vremeObjave"/></h5>
+                                        <h3>
+                                            <t:eventlink t:event="izaberiPoslednjuVest" 
+                                                         t:context="literal:3">
+                                                ${poslednjaVest(3).naslovVesti}
+                                            </t:eventlink>
+                                        </h3>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <a class="left carousel-control" href="#slajdovi" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">${message:prethodni}</span>
+                            </a>
+                            <a class="right carousel-control" href="#slajdovi" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">${message:sledeci}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div id="slajdovi2" class="carousel slide" data-ride="carousel">
+
+                            <ol class="carousel-indicators">
+                                <li data-target="#slajdovi2" data-slide-to="0" class="active"></li>
+                                <li data-target="#slajdovi2" data-slide-to="1"></li>
+                                <li data-target="#slajdovi2" data-slide-to="2"></li>
+                                <li data-target="#slajdovi2" data-slide-to="3"></li>
+                            </ol>
+
+                            <div class="carousel-inner" role="listbox">
+                                <div class="item active">
+                                    <img src="${poslednjaVest(4).slikaVesti}" alt="${poslednjaVest(4).naslovVesti}"/>
+                                    <div class="carousel-caption">
+                                        <h5>${poslednjaVest(4).katId.nazivKategorije} - <t:output format="format" value="poslednjaVest(4).vremeObjave"/></h5>
+                                        <h3>
+                                            <t:eventlink t:event="izaberiPoslednjuVest" 
+                                                         t:context="literal:4">
+                                                ${poslednjaVest(4).naslovVesti}
+                                            </t:eventlink>
+                                        </h3>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <img src="${poslednjaVest(5).slikaVesti}" alt="${poslednjaVest(5).naslovVesti}"/>
+                                    <div class="carousel-caption">
+                                        <h5>${poslednjaVest(5).katId.nazivKategorije} - <t:output format="format" value="poslednjaVest(5).vremeObjave"/></h5>
+                                        <h3>
+                                            <t:eventlink t:event="izaberiPoslednjuVest" 
+                                                         t:context="literal:5">
+                                                ${poslednjaVest(5).naslovVesti}
+                                            </t:eventlink>
+                                        </h3>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <img src="${poslednjaVest(6).slikaVesti}" alt="${poslednjaVest(6).naslovVesti}"/>
+                                    <div class="carousel-caption">
+                                        <h5>${poslednjaVest(6).katId.nazivKategorije} - <t:output format="format" value="poslednjaVest(6).vremeObjave"/></h5>
+                                        <h3>
+                                            <t:eventlink t:event="izaberiPoslednjuVest" 
+                                                         t:context="literal:6">
+                                                ${poslednjaVest(6).naslovVesti}
+                                            </t:eventlink>
+                                        </h3>
+                                    </div>
+                                </div>
+
+                                <div class="item">
+                                    <img src="${poslednjaVest(7).slikaVesti}" alt="${poslednjaVest(7).naslovVesti}"/>
+                                    <div class="carousel-caption">
+                                        <h5>${poslednjaVest(7).katId.nazivKategorije} - <t:output format="format" value="poslednjaVest(7).vremeObjave"/></h5>
+                                        <h3>
+                                            <t:eventlink t:event="izaberiPoslednjuVest" 
+                                                         t:context="literal:7">
+                                                ${poslednjaVest(7).naslovVesti}
+                                            </t:eventlink>
+                                        </h3>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <a class="left carousel-control" href="#slajdovi2" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">${message:prethodni}</span>
+                            </a>
+                            <a class="right carousel-control" href="#slajdovi2" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">${message:sledeci}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3 vesti">
+                        <img class="img-responsive" src="${poslednjaVest(8).slikaVesti}" alt="${poslednjaVest(8).naslovVesti}"></img>
+                        <h5>${poslednjaVest(8).katId.nazivKategorije} - <t:output format="format" value="poslednjaVest(8).vremeObjave"/></h5>
+                        <h3>
+                            <t:eventlink t:event="izaberiPoslednjuVest" t:context="literal:8">
+                                ${poslednjaVest(8).naslovVesti}
+                            </t:eventlink>
+                        </h3>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 vesti">
+                        <img class="img-responsive" src="${poslednjaVest(9).slikaVesti}" alt="${poslednjaVest(9).naslovVesti}"></img>
+                        <h5>${poslednjaVest(9).katId.nazivKategorije} - <t:output format="format" value="poslednjaVest(9).vremeObjave"/></h5>
+                        <h3>
+                            <t:eventlink t:event="izaberiPoslednjuVest" t:context="literal:9">
+                                ${poslednjaVest(9).naslovVesti}
+                            </t:eventlink>
+                        </h3>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 vesti">
+                        <img class="img-responsive" src="${poslednjaVest(10).slikaVesti}" alt="${poslednjaVest(10).naslovVesti}"></img>
+                        <h5>${poslednjaVest(10).katId.nazivKategorije} - <t:output format="format" value="poslednjaVest(10).vremeObjave"/></h5>
+                        <h3>
+                            <t:eventlink t:event="izaberiPoslednjuVest" t:context="literal:10">
+                                ${poslednjaVest(10).naslovVesti}
+                            </t:eventlink>
+                        </h3>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <t:beaneditform t:id="pretraga1" object="pretraga" t:zone="zonaPretrazenihVesti"
+                                        submitlabel="message:submit-label" add="kid">
+                            <p:kid>
+                                <t:label for="kid"/>:
+                                <t:select t:blankLabel="Kategorija" t:id="kid" 
+                                          encoder="encoder" model="kategorije" validate="required"/>
+                            </p:kid>
+                        </t:beaneditform>
+                        <t:if test="Ulogovan">
+                            <t:if test="Urednik">
+                                <t:eventlink t:event="NovaVest" class="btn btn-large btn-primary">
+                                    ${message:pisanjeNoveVesti}
+                                </t:eventlink>
+                            </t:if>
+                        </t:if>
+                    </div>
+                </div>
+
+            </div>
+        </t:if> 
+    </t:zone>
+
+    <t:zone t:id="zonaPretrazenihVesti">
+        <t:if test="pretragaAktivirana"> 
+        
+            <p>
+                <h3>${message:pretrazeneVesti}</h3>
+            </p>
+            <t:actionlink t:zone="zonaPoslednjihVesti" t:id="povratak" class="btn btn-default navbar-btn navbar-right">
+                ${message:povratak}
+            </t:actionlink>
+            <div class="col-sm-9 col-md-9 col-lg-9">
+                <t:if test="!pretragaPrazna">
+                    <t:loop source="pretrazeneVesti" value="pVest">
+                        <t:any element="div" class="row pretrazenavest">
+
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <img class="img-responsive" src="${pVest.slikaVesti}"
+                                     alt="${pVest.naslovVesti}">
+                                </img>
+                            </div>
+                            <div class="col-sm-8 col-md-8 col-lg-8">
+                                <h3>
+                                    <t:eventlink t:event="izaberiPretrazenuVest" t:context="pVest">    
+                                        ${pVest.naslovVesti} - <t:output format="format" 
+                                                                         value="pVest.vremeObjave"/>
+                                    </t:eventlink>
+                                </h3>    
+                                <t:if test="PrikazEditOpcije">
+                                    <t:eventlink t:event="izmeniPretrazenuVest" t:context="pVest">    
+                                        ${message:izmeni-vest}
+                                    </t:eventlink>
+                                </t:if>
+                                <t:if test="PrikazDeleteOpcije">
+                                    <t:actionlink t:id="obrisiPretrazenuVest" t:context="pVest"
+                                    t:Confirm.title="message:potvrdaBrisanja-label" 
+                                    t:Confirm.message="${message:potvrdaBrisanjaVesti-label} 
+                                        ${pVest.naslovVesti}" t:mixins="Confirm">    
+                                        ${message:obrisi-vest}
+                                    </t:actionlink>
+                                </t:if>                        
+                            </div>
+                        </t:any>
+                    </t:loop>
+                </t:if>
+                <t:if test="pretragaPrazna">
+                    <h3>${message:prazna-pretraga}</h3>
+                </t:if>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+                <t:beaneditform t:id="pretraga2" object="pretraga" submitlabel="message:submit-label"
+                                add="kid2" t:zone="zonaPretrazenihVesti">
+                    <p:kid2>
+                        <t:label for="kid2"/>:
+                        <t:select t:blankLabel="Kategorija" t:id="kid2" 
+                                  encoder="encoder" model="kategorije" validate="required"/>
+                    </p:kid2>
+                </t:beaneditform>
+            </div>
+          
+        </t:if>
+    </t:zone>   
 </html>
 
     <!-- Most of the page content, including <head>, <body>, etc. tags, comes from Layout.tml -->

@@ -1,0 +1,108 @@
+<html t:type="layout" title="${izabranaVelikaNagrada.nazivVn}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="row">
+                    <p>
+                        <h3>
+                            ${izabranaVelikaNagrada.nazivVn}
+                        </h3>
+                    </p>
+                </div>
+                <div class="row">
+                    <p>
+                        <b>
+                            ${message:datum}
+                        </b>
+                        <i>
+                            <t:output format="format" value="izabranaVelikaNagrada.datumPocetka"/>
+                            - <t:output format="format" value="izabranaVelikaNagrada.datumZavrsetka"/>
+                        </i>
+                    </p>
+                </div>
+                <t:if test="imaDrzavu">
+                    <div class="row">
+                        <p>
+                            <b>
+                                ${message:drzava}${izabranaVelikaNagrada.drzId.nazivDrzave}
+                            </b>
+                        </p>
+                    </div>
+                </t:if>
+                <t:if test="imaTreninge">
+                    <div class="row">
+                        <h4>
+                            ${message:treninzi}
+                        </h4>
+                    </div>
+                    <t:loop source="treninziVelikeNagrade" value="trening">
+                        <t:any element="div" class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <p>
+                                    <b>
+                                        <t:eventlink t:event="izaberiTrening" t:context="trening">
+                                            ${message:rezultat-treninga}${trening.nazivTreninga}
+                                        </t:eventlink>
+                                    </b>
+                                    <i>
+                                        (<t:output format="format2" value="trening.vremeTreninga"/>)
+                                    </i>
+                                </p>
+                            </div>
+                        </t:any>
+                    </t:loop>
+                </t:if>
+                <t:if test="imaKvalifikacije">
+                    <div class="row">
+                        <h4>
+                            ${message:kvalifikacije}
+                        </h4>
+                    </div>
+                    <t:loop source="kvalifikacijeVelikeNagrade" value="kvalifikacije">
+                        <t:any element="div" class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <p>
+                                    <b>
+                                        <t:eventlink t:event="izaberiKvalifikacije" t:context="kvalifikacije">
+                                            ${message:rezultat-kvalifikacija}${kvalifikacije.nazivKvalifikacija}
+                                        </t:eventlink>
+                                    </b>
+                                    <i>
+                                        (<t:output format="format2" value="kvalifikacije.vremeKvalifikacija"/>)
+                                    </i>
+                                </p>
+                            </div>
+                        </t:any>
+                    </t:loop>
+                </t:if>
+                <t:if test="imaTrke">
+                    <div class="row">
+                        <h4>
+                            ${message:trke}
+                        </h4>
+                    </div>
+                    <t:loop source="trkeVelikeNagrade" value="trka">
+                        <t:any element="div" class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <p>
+                                    <b>
+                                        <t:eventlink t:event="izaberiTrku" t:context="trka">
+                                            ${message:rezultat-trke}${trka.nazivTrke}
+                                        </t:eventlink>
+                                    </b>
+                                    <i>
+                                        (<t:output format="format2" value="trka.vremeTrke"/>)
+                                    </i>
+                                </p>
+                            </div>
+                        </t:any>
+                    </t:loop>
+                </t:if>
+            </div>
+        </div>
+    </div>
+
+</html>

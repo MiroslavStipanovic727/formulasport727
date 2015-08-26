@@ -14,9 +14,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Drzava iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -27,6 +29,7 @@ public class Drzava extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "NAZIV_DRZAVE")
+    @Validate("required")
     private String nazivDrzave;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "drzId")
     private List<Tim> timList;
@@ -35,6 +38,7 @@ public class Drzava extends AbstraktniEntitet {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "drzId")
     private List<Vozac> vozacList;
 
+    @Inject
     public Drzava() {
     }
 
@@ -109,7 +113,7 @@ public class Drzava extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Država: "+getNazivDrzave();
+        return getNazivDrzave();
     }
     
 }

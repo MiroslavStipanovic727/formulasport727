@@ -1,7 +1,126 @@
-<html t:type="layout" title="Web Prodavnica"
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+<html t:type="layout" title="${message:naslov}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
       xmlns:p="tapestry:parameter">
 
-
+    <t:if test="!Ulogovan">
+        <div class="row">
+            <h3>
+                <b>
+                    ${message:ulogujSe}
+                </b>
+            </h3>
+        </div>
+    </t:if>
+    <t:if test="Ulogovan">
+        <div class="container">
+            <div class="row">
+                <p>
+                    <h3>
+                        ${message:naslov}
+                    </h3>
+                </p>
+            </div>
+            <div class="row">
+                <t:zone t:id="zonaFormeIzborTipa">
+                    <t:form t:id="izborTipaArtikla" t:zone="zonaPrikazaArtikala">
+                        <t:label for="izborKategorijeArtikla"/>    
+                        <t:select t:id="izborKategorijeArtikla" t:model="kategorijeArtikala" 
+                                  onchange="this.form.submit()" encoder="encoderTipaArtikla" 
+                                  label="message:izborKategorijeArtikla-label" validate ="required" />
+                    </t:form>
+                </t:zone>
+            </div>
+            <div class="row">
+                <t:zone t:id="zonaPrikazaArtikala">
+                    <div class="col-xs-6 col-sm-9 col-md-9 col-lg-9">
+                        <t:loop source="artikliKategorije" value="artikalKategorije">
+                            <t:any element="div" class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                                <t:if test="ImaSliku">
+                                    <p>
+                                        <img class="img-responsive" src="${artikalKategorije.slika}"
+                                            alt="${artikalKategorije.nazivArtikla}">
+                                        </img>
+                                    </p>
+                                </t:if>
+                                <t:if test="!ImaSliku">
+                                    <p>
+                                        <img class="img-responsive" src="${asset:context:images/bezslikeartikla.png}"
+                                            alt="${message:bezslike}">
+                                        </img>
+                                    </p>
+                                </t:if>
+                                <p>
+                                    <b>${message:naziv}</b> ${artikalKategorije.nazivArtikla}
+                                </p>
+                                <p>
+                                    <b>${message:opis}</b> 
+                                    <i> ${artikalKategorije.kratakOpis}</i>
+                                </p>
+                                <p>
+                                    <b>${message:cena}</b> 
+                                    <u> ${artikalKategorije.cena}</u>
+                                </p>
+                                <p>
+                                    <t:form t:id="dodavanjeUKorpu" context="artikalKategorije" 
+                                            t:zone="zonaPrikazaKorpe">
+                                        <t:label for="kolicina"/>    
+                                        <t:Textfield t:id="kolicina" validate="min=1,max=100"/>
+                                        <t:submit class="btn btn-large btn-primary" 
+                                                  value="message:dodajUKorpu-label"/>
+                                    </t:form>
+                                </p>
+                            </t:any>
+                        </t:loop>
+                    </div>
+                </t:zone>
+                <t:zone t:id="zonaPrikazaKorpe">
+                    <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 korpa">
+                        <p class="vecitekst centartekst">
+                            <b>${message:korpa}</b>
+                        </p>
+                        <table>
+                            <th class="centartekst razmakld">
+                                ${message:artikal}
+                            </th>
+                            <th class="centartekst razmakld">
+                                ${message:brojArtikala}
+                            </th>
+                            <th class="centartekst razmakld">
+                                ${message:izbacivanje}
+                            </th>
+                            <t:loop source="korpaArtikala" value="redKorpe">
+                                <t:any element="tr" class="tabelagranica">
+                                    <td class="razmakld">
+                                        ${redKorpe.artId.nazivArtikla}
+                                    </td>
+                                    <td class="razmakld">
+                                        ${kolicinaArtikla(redKorpe.artId)}
+                                    </td>
+                                    <td class="razmakld">
+                                        <t:eventlink t:event="izbaciIzKorpe" 
+                                                     t:zone="zonaPrikazaKorpe" 
+                                                     t:context="redKorpe.artId">
+                                            <b>
+                                                <i>
+                                                    <u>${message:izbaci}</u>
+                                                </i>
+                                            </b>
+                                        </t:eventlink>
+                                    </td>
+                                </t:any>
+                            </t:loop>
+                        </table>
+                        <p>
+                            ${message:ukCena}${ukupnaCena}${message:valuta}
+                        </p>
+                        <t:actionlink t:id="plati" t:zone="zonaPrikazaKorpe" 
+                                      class="btn btn-large btn-primary">
+                            ${message:plati}
+                        </t:actionlink>
+                    </div>
+                </t:zone>
+            </div>
+        </div>
+    </t:if>
 
 </html>

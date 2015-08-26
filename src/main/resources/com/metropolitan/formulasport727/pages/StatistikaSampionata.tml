@@ -1,7 +1,177 @@
-<html t:type="layout" title="Statistika Šampionata"
+<html t:type="layout" title="${message:naslov}"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-
+    <t:zone t:id="zonaFormeIzborPodataka">
+        <t:form t:id="izborPodataka" t:zone="zonaPrikazaPodataka">
+            <t:if test="!kategorijaIzabrana">
+                <t:label for="izborKategorije"/>    
+                <t:select t:id="izborKategorije" t:model="kategorije" onchange="this.form.submit()"
+                          encoder="encoder" t:value="vrednostKategorije" label="message:izborKategorije-label" />
+            </t:if>
+            <t:if test="prikazSezone">
+                <t:label for="izborSezone"/>
+                <t:select t:id="izborSezone" t:model="sezone" onchange="this.form.submit()"
+                          encoder="encoderSezone" t:value="vrednostSezone" label="message:izborSezone-label" />
+            </t:if>
+            <t:if test="prikazTipa">
+                <t:label for="tipovi"/>
+                <t:select t:id="tipovi" onchange="this.form.submit()" label="message:izborTipa-label"/><!--t:blankOption="never"-->
+            </t:if>
+        </t:form>
+        <t:actionlink t:id="reset" t:zone="zonaPrikazaPodataka" class="btn btn-primary btn-large">${izabrano} ${message:reset-label}</t:actionlink>
+    </t:zone>
+    <t:zone t:id="zonaPrikazaPodataka">
+        <t:if test="prikazVozaca">
+            <t:loop source="vozaci" value="vozac">
+                <t:any element="div" class="row">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <img class="img-responsive" src="${vozac.slika}"
+                             alt="${vozac.imeVozaca} ${vozac.prezimeVozaca}">
+                        </img>
+                    </div>
+                    <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                            ${message:imeIPrezime} ${vozac.imeVozaca} ${vozac.prezimeVozaca}
+                        </div> 
+                        <div class="row">
+                            ${message:datumRodjenja} ${vozac.datumRodjenja}
+                        </div>
+                        <div class="row">
+                            ${message:broj} ${vozac.broj}
+                        </div>
+                        <div class="row">
+                            ${message:drzava} ${vozac.drzId.nazivDrzave}
+                        </div>
+                        <div class="row">
+                            ${message:tim} ${vozac.timId.nazivTima} 
+                        </div>                      
+                        <div class="row">
+                            ${message:pozicija} ${vozac.klaId.pozicijaK}
+                        </div> 
+                        <div class="row">
+                            ${message:bodovi} ${vozac.klaId.bodovi}
+                        </div>
+                    </div>
+                </t:any>
+            </t:loop>
+        </t:if>
+        <t:if test="prikazTimova">
+            <t:loop source="timovi" value="tim">
+                <t:any element="div" class="row">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <img class="img-responsive" src="${tim.logoTima}"
+                             alt="${tim.nazivTima}">
+                        </img>
+                    </div>
+                    <div class="col-sm-8 col-md-8 col-lg-8">
+                        <div class="row">
+                            ${message:nazivTima} ${tim.nazivTima}
+                        </div> 
+                        <div class="row">
+                            ${message:drzava} ${tim.drzId.nazivDrzave}
+                        </div>                   
+                        <div class="row">
+                            ${message:pozicija} ${tim.klaId.pozicijaK}
+                        </div> 
+                        <div class="row">
+                            ${message:bodovi} ${tim.klaId.bodovi}
+                        </div>
+                        <t:loop source="vozaci" value="vozac">
+                            <t:if test="vozacTima">
+                            <t:any element="div" class="row">
+                                ${message:vozac} ${vozac.imeVozaca} ${vozac.prezimeVozaca} ${vozac.broj}
+                            </t:any>
+                            </t:if>
+                        </t:loop>
+                    </div>
+                </t:any>
+            </t:loop>
+        </t:if>
+        <t:if test="prikazVelikihNagrada">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <p>${message:naziv-velike-nagrade}</p>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <p>${message:datum-pocetka}</p>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <p>${message:datum-zavrsetka}</p>
+                </div>
+            </div>
+            <t:loop source="velikeNagrade" value="velikaNagrada">
+                <t:any element="div" class="row">
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <t:eventlink t:event="izaberiVelikuNagradu" t:context="velikaNagrada">
+                            ${velikaNagrada.nazivVn}
+                        </t:eventlink>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <t:output format="format" value="velikaNagrada.datumPocetka"/>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <t:output format="format" value="velikaNagrada.datumZavrsetka"/>
+                    </div>
+                </t:any>
+            </t:loop>
+        </t:if>
+        <t:if test="PrikazTabela">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <table>
+                        <th class="centartekst razmakld">
+                            ${message:pozicijaTabela}
+                        </th>
+                        <th class="centartekst razmakld">
+                            ${message:vozacTabela}
+                        </th>
+                        <th class="centartekst razmakld">
+                            ${message:bodoviTabela}
+                        </th>
+                        <t:loop source="tabelaVozaca" value="redVozac">
+                            <t:any element="tr" class="tabelagranica">
+                                <td class="razmakld">
+                                    ${redVozac.pozicijaK}
+                                </td>
+                                <td class="razmakld">
+                                    ${redVozac.vozId.imeVozaca} ${redVozac.vozId.prezimeVozaca}
+                                </td>
+                                <td class="razmakld">
+                                    ${redVozac.bodovi}
+                                </td>
+                            </t:any>
+                        </t:loop>
+                    </table>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <table>
+                        <th class="centartekst razmakld">
+                            ${message:pozicijaTabela}
+                        </th>
+                        <th class="centartekst razmakld">
+                            ${message:timTabela}
+                        </th>
+                        <th class="centartekst razmakld">
+                            ${message:bodoviTabela}
+                        </th>
+                        <t:loop source="tabelaTimova" value="redTim">
+                            <t:any element="tr" class="tabelagranica">
+                                <td class="razmakld">
+                                    ${redTim.pozicijaK}
+                                </td>
+                                <td class="razmakld">
+                                    ${redTim.timId.nazivTima}
+                                </td>
+                                <td class="razmakld">
+                                    ${redTim.bodovi}
+                                </td>
+                            </t:any>
+                        </t:loop>
+                    </table>
+                </div>
+            </div>
+        </t:if>
+    </t:zone>
 
 </html>

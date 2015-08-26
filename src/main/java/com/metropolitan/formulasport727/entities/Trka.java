@@ -19,9 +19,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Trka iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -32,12 +34,14 @@ public class Trka extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "NAZIV_TRKE")
+    @Validate("required")
     private String nazivTrke;
     @Column(name = "NAJBRZI_KRUG")
     private String najbrziKrug;
     @Basic(optional = false)
     @Column(name = "VREME_TRKE")
     @Temporal(TemporalType.TIMESTAMP)
+    @Validate("required")
     private Date vremeTrke;
     @JoinColumn(name = "VEL_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
@@ -45,6 +49,7 @@ public class Trka extends AbstraktniEntitet {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trkId")
     private List<TrkackiRezultat> trkackiRezultatList;
 
+    @Inject
     public Trka() {
     }
 
@@ -128,7 +133,7 @@ public class Trka extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Trka: "+getNazivTrke();
+        return getNazivTrke();
     }
     
 }

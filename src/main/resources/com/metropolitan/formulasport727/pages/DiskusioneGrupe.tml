@@ -1,7 +1,214 @@
-<html t:type="layout" title="Diskusione Grupe"
+<html t:type="layout" title="${message:naslov}"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-
-
+    <t:if test="!Ulogovan">
+        <div class="row">
+            <h3>
+                <b>
+                    ${message:ulogujSe}
+                </b>
+            </h3>
+        </div>
+    </t:if>
+    <t:if test="Ulogovan">
+        <div class="row">
+            <h3>
+                ${message:naslov}
+            </h3>
+        </div>
+        <div class="row">
+            <t:zone t:id="zonaFormeIzboraKategorije">
+                <t:form t:id="izborKategorije" t:zone="zonaPrikazaDG">
+                    <t:label for="selektKategorije"/>    
+                    <t:select t:id="selektKategorije" t:model="kategorije" onchange="this.form.submit()"
+                              encoder="encoderKategorije" label="message:selektKategorije" />
+                </t:form>
+            </t:zone>
+        </div>
+        <t:if test="imaKategorije">
+            <t:zone t:id="zonaPrikazaDG">
+                <div class="row centartekst">
+                    <h3>
+                        ${message:kategorija}${selektKategorije.nazivKategorije}
+                    </h3>
+                </div>
+                <div class="row dgred">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 centartekst">
+                        <b>${message:nazivDG}</b>
+                    </div>
+                    <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 centartekst">
+                        <b>${message:opisDG}</b>
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 centartekst">
+                        <b>${message:brojDiskusija}</b>
+                    </div>
+                </div>
+                <t:loop source="diskusioneGrupeKategorije" value="dGrupa">
+                    <t:any element="div" class="row dgred">
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 centartekst">
+                            <t:eventlink t:event="izaberiDG" t:context="dGrupa"
+                            t:zone="zonaPrikazaDiskusija">
+                                ${dGrupa.nazivDg}
+                            </t:eventlink>
+                        </div>
+                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 centartekst">
+                            ${dGrupa.opisDG}
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 centartekst">
+                            <b>${brojDiskusijaDG(dGrupa)}</b>
+                        </div>
+                    </t:any>
+                </t:loop>
+            </t:zone>
+        </t:if>
+        <t:if test="imaIzabraneDG">
+            <t:zone t:id="zonaPrikazaDiskusija">
+                <div class="row centartekst">
+                    <h3>
+                        ${message:izabranaDGrupa}${izabranaDG.nazivDg}
+                    </h3>
+                </div>
+                <t:if test="imaOdobrenihDiskusija">
+                    <div class="row centartekst">
+                        <t:eventlink t:event="novaDiskusija" t:context="izabranaDG" class="btn btn-large btn-primary">
+                            ${message:novaDiskusija}
+                        </t:eventlink>
+                    </div>
+                    <div class="row dgred">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 centartekst">
+                            <b>${message:naslovDiskusije}</b>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 centartekst">
+                            <b>${message:otvaracDiskusije}</b>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 centartekst">
+                            <b>${message:vremeOtvaranjaDiskusije}</b>
+                        </div>
+                    </div>
+                    <t:loop source="diskusijeGrupe" value="diskusijaGrupe">
+                        <t:any element="div" class="row dgred">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 centartekst">
+                                <t:eventlink t:event="izaberiDiskusiju" t:context="diskusijaGrupe">
+                                    ${diskusijaGrupe.naslovDiskusije}
+                                </t:eventlink>
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 centartekst">
+                                ${diskusijaGrupe.korId.korisnickoIme}
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 centartekst">
+                                <t:output format="format" value="diskusijaGrupe.vremeOtvaranja"/>
+                            </div>
+                        </t:any>
+                    </t:loop>
+                </t:if>
+                <t:if test="!imaOdobrenihDiskusija">
+                    <div class="row centartekst">
+                        <h5>
+                            ${message:nemaDiskusija}
+                        </h5>
+                    </div>
+                </t:if>
+                <div class="row centartekst">
+                    <t:eventlink t:event="novaDiskusija" t:context="izabranaDG" class="btn btn-large btn-primary">
+                        ${message:novaDiskusija}
+                    </t:eventlink>
+                </div>
+            <!--</t:if>-->
+                <t:if test="Moderator">
+                    <t:if test="ImaNeodobrenihDiskusija">
+                        <div class="row centartekst">
+                            <h5>
+                                ${message:imaNeodobrenihDiskusija}
+                            </h5>
+                        </div>
+                        <div class="row dgred">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 centartekst">
+                                <b>${message:naslovDiskusije}</b>
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 centartekst">
+                                <b>${message:otvaracDiskusije}</b>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 centartekst">
+                                <b>${message:vremeOtvaranjaDiskusije}</b>
+                            </div>
+                        </div>
+                        <t:loop source="neodobreneDiskusijeGrupe" value="neodobrenaDiskusijaGrupe">
+                            <t:any element="div" class="row dgred">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 centartekst">
+                                    <t:eventlink t:event="izaberiDiskusiju" t:context="neodobrenaDiskusijaGrupe">
+                                        ${neodobrenaDiskusijaGrupe.naslovDiskusije}
+                                    </t:eventlink>
+                                </div>
+                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 centartekst">
+                                    ${neodobrenaDiskusijaGrupe.korId.korisnickoIme}
+                                </div>
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 centartekst">
+                                    <t:output format="format" value="neodobrenaDiskusijaGrupe.vremeOtvaranja"/>
+                                </div>
+                            </t:any>
+                        </t:loop>
+                    </t:if>
+                    <t:if test="!ImaNeodobrenihDiskusija">
+                        <div class="row centartekst">
+                            <h5>
+                                ${message:nemaNeodobrenihDiskusija}
+                            </h5>
+                        </div>
+                    </t:if>
+                </t:if>
+            </t:zone>
+        </t:if>
+        <div class="row">
+            <t:zone t:id="zonaFormePretraga">
+                <t:form t:id="pretraga" t:zone="zonaPrikazaPretrage">
+                    <t:label for="kljucnereci"/>    
+                    <t:textfield t:id="kljucnereci" label="message:pretraga" t:validate="required" />
+                    <t:submit class="btn btn-large btn-primary" value="message:pretrazi"/>
+                </t:form>
+            </t:zone>
+        </div>
+        <t:if test="IzvrsenaPretraga">
+            <t:zone t:id="zonaPrikazaPretrage">
+                <div class="row">
+                    <h5>
+                        ${message:pretrazeneReci-label}${pretrazeneReci}
+                    </h5>
+                </div>
+                <div class="row dgred">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 centartekst">
+                        <b>${message:naslovDiskusije}</b>
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 centartekst">
+                        <b>${message:otvaracDiskusije}</b>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 centartekst">
+                        <b>${message:vremeOtvaranjaDiskusije}</b>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 centartekst">
+                        <b>${message:kategorijaPretrazeneDiskusije}</b>
+                    </div>
+                </div> 
+                <t:loop source="pretrazeneDiskusije" value="pretrazenaDiskusija">
+                    <t:any element="div" class="row dgred">
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 centartekst">
+                            <t:eventlink t:event="izaberiDiskusiju" t:context="pretrazenaDiskusija">
+                                ${pretrazenaDiskusija.naslovDiskusije}
+                            </t:eventlink>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 centartekst">
+                            ${pretrazenaDiskusija.korId.korisnickoIme}
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 centartekst">
+                            <t:output format="format" value="pretrazenaDiskusija.vremeOtvaranja"/>
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 centartekst">
+                            ${pretrazenaDiskusija.disId.katId.nazivKategorije} - ${pretrazenaDiskusija.disId.nazivDg}
+                        </div>
+                    </t:any>
+                </t:loop>
+            </t:zone>
+        </t:if>
+                   
+    </t:if>
 </html>

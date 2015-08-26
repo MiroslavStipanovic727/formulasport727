@@ -1,7 +1,7 @@
 package com.metropolitan.formulasport727.services;
 
+import com.metropolitan.formulasport727.dao.*;
 import java.io.IOException;
-
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
@@ -11,9 +11,6 @@ import org.apache.tapestry5.ioc.annotations.Local;
 import org.apache.tapestry5.ioc.services.ApplicationDefaults;
 import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.apache.tapestry5.services.*;
-import org.apache.tapestry5.services.javascript.JavaScriptStack;
-import org.apache.tapestry5.services.javascript.StackExtension;
-import org.apache.tapestry5.services.javascript.StackExtensionType;
 import org.slf4j.Logger;
 
 /**
@@ -25,6 +22,28 @@ public class AppModule
     public static void bind(ServiceBinder binder)
     {
         // binder.bind(MyServiceInterface.class, MyServiceImpl.class);
+        binder.bind(KategorijaDAO.class, KategorijaDAOImpl.class);
+        binder.bind(VestDAO.class, VestDAOImpl.class);
+        binder.bind(KorisnikDAO.class, KorisnikDAOImpl.class);
+        binder.bind(KomentarVestiDAO.class, KomentarVestiDAOImpl.class);
+        binder.bind(SezonaDAO.class, SezonaDAOImpl.class);
+        binder.bind(VozacDAO.class, VozacDAOImpl.class);
+        binder.bind(TimDAO.class, TimDAOImpl.class);
+        binder.bind(VelikaNagradaDAO.class, VelikaNagradaDAOImpl.class);
+        binder.bind(TreningDAO.class, TreningDAOImpl.class);
+        binder.bind(KvalifikacijeDAO.class, KvalifikacijeDAOImpl.class);
+        binder.bind(TrkaDAO.class, TrkaDAOImpl.class);
+        binder.bind(ArtikalDAO.class, ArtikalDAOImpl.class);
+        binder.bind(TipArtiklaDAO.class, TipArtiklaDAOImpl.class);
+        binder.bind(KlasifikacijaDAO.class, KlasifikacijaDAOImpl.class);
+        binder.bind(DrzavaDAO.class, DrzavaDAOImpl.class);
+        binder.bind(PozicioniRezultatDAO.class, PozicioniRezultatDAOImpl.class);
+        binder.bind(TrkackiRezultatDAO.class, TrkackiRezultatDAOImpl.class);
+        binder.bind(DiskusionaGrupaDAO.class, DiskusionaGrupaDAOImpl.class);
+        binder.bind(DiskusijaDAO.class, DiskusijaDAOImpl.class);
+        binder.bind(KomentarDiskusijeDAO.class, KomentarDiskusijeDAOImpl.class);
+        binder.bind(KorpaDAO.class, KorpaDAOImpl.class);
+        binder.bind(KorpaArtikalDAO.class, KorpaArtikalDAOImpl.class);
 
         // Make bind() calls on the binder object to define most IoC services.
         // Use service builder methods (example below) when the implementation
@@ -55,11 +74,11 @@ public class AppModule
         // locales to just "en" (English). As you add localised message catalogs and other assets,
         // you can extend this list of locales (it's a comma separated series of locale names;
         // the first locale name is the default when there's no reasonable match).
-        configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
+        configuration.add(SymbolConstants.SUPPORTED_LOCALES, "sr, en");
 
               // You should change the passphrase immediately; the HMAC passphrase is used to secure
         // the hidden field data stored in forms to encrypt and digitally sign client-side data.
-        configuration.add(SymbolConstants.HMAC_PASSPHRASE, "change this immediately");
+        configuration.add(SymbolConstants.HMAC_PASSPHRASE, "SkAfIsKaFn4JaKLj5UIn3KoViĆ1GäTzIŠ8MaHeR");
     }
 
 	/**
@@ -72,10 +91,13 @@ public class AppModule
         // Support for jQuery is new in Tapestry 5.4 and will become the only supported
         // option in 5.5.
 		configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
-//		configuration.add(SymbolConstants.BOOTSTRAP_ROOT, "context:mybootstrap");
 		configuration.add(SymbolConstants.MINIFICATION_ENABLED, true);
 	}
 
+        public void contributeComponentRequestHandler(OrderedConfiguration<ComponentRequestFilter>
+            configuration) {
+            configuration.addInstance("PageProtectionFilter", PageProtectionFilter.class);
+        }
 
     /**
      * This is a service definition, the service will be named "TimingFilter". The interface,

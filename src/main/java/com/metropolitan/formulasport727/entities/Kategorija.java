@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- *
+ * Klasa koja predstavlja entitet Kategorija iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -119,7 +119,7 @@ public class Kategorija extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Kategorija: "+getNazivKategorije();
+        return getNazivKategorije();
     }
     
 }

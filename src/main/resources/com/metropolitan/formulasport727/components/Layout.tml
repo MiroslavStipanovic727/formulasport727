@@ -24,7 +24,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span> 
         </button>
-        <t:pagelink page="index" class="navbar-brand">FormulaSport727.com</t:pagelink>
+        <t:pagelink page="index" class="navbar-brand">${message:fs727}</t:pagelink>
     </div>
     <div class="collapse navbar-collapse" id="meni">
       <ul class="nav navbar-nav">
@@ -35,13 +35,24 @@
         </t:loop>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-          <li>
-              <t:pagelink page="Registracija">
-                  <span class="glyphicon glyphicon-user"></span> Registracija</t:pagelink>
-          </li>
-          <li><t:pagelink page="Login">
-                  <span class="glyphicon glyphicon-log-in"></span> Prijava</t:pagelink>
-          </li>
+          <t:if test="!ulogovan">
+              <li>
+                  <t:pagelink page="Registracija">
+                      <span class="glyphicon glyphicon-user"></span>${message:registracija}</t:pagelink>
+              </li>
+              <li><t:pagelink page="Login">
+                      <span class="glyphicon glyphicon-log-in"></span>${message:prijava}</t:pagelink>
+              </li>
+          </t:if>
+          <t:if test="ulogovan">
+              <li>
+                  <t:pagelink page="Index" class="navbar-right">${ulogovaniKorisnik.korisnickoIme}</t:pagelink>
+              </li>
+              <li>
+                  <t:eventlink t:event="logout" ><span class="glyphicon glyphicon-log-out"></span>${message:odjava}</t:eventlink>
+              </li>
+              
+          </t:if>
       </ul>
     </div>
   </div>
@@ -49,54 +60,20 @@
 <div class="container">
     <div class="jumbotron">
         <h1>
-            FormulaSport727.com
+            ${message:fs727com}
         </h1>
         <p>
-            Svet formule i autosporta
+            ${message:subnaslov}
         </p>
     </div>
 </div>  
-<!--<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-	    <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <t:pagelink page="index" class="navbar-brand">app</t:pagelink>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <t:loop source="pageNames" value="pageName">
-                    <t:any element="li" class="prop:classForPageName">
-                        <t:pagelink page="prop:pageName">${pageName}</t:pagelink>
-                    </t:any>
-                </t:loop>
-            </ul>
-            <span class="navbar-right">
-                <li>
-                    <t:pagelink page="login" class="btn btn-default navbar-btn">Sign in</t:pagelink>
-               	</li>
-            </span>
-
-        </div>--><!--/.nav-collapse -->
-    <!--</div>
-</div>
-
-<div class="container">
-    <div class="row">
-        <div class="span12">
-            <t:alerts/>
-        </div>
-    </div>
-</div>-->
 
 <div class="container">
 
     <t:body />
-
+    <div class="row">
+        <div id="crta" class="col-sm-12 col-md-12 col-lg-12"></div>
+    </div>
     <nav class="navbar navbar-inverse navbar-fixed-bottom">
           <div class="container-fluid">
             <div class="navbar-header">
@@ -105,7 +82,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span> 
                 </button>
-                <t:pagelink page="index" class="navbar-brand">FormulaSport727</t:pagelink>
+                <t:pagelink page="index" class="navbar-brand">${message:fs727}</t:pagelink>
             </div>
             <div class="collapse navbar-collapse" id="meni2">
               <ul class="nav navbar-nav">
@@ -117,16 +94,32 @@
               </ul>
               <ul class="nav navbar-nav navbar-right">
                   <li>
-                      <t:pagelink page="Registracija">
-                          <span class="glyphicon glyphicon-user"></span> Registracija</t:pagelink>
+                      <t:form t:id="promenaJezika">
+                          <t:select t:id="selektJezik" onchange="this.form.submit()"/>
+                      </t:form>
                   </li>
-                  <li><t:pagelink page="Login">
-                          <span class="glyphicon glyphicon-log-in"></span> Prijava</t:pagelink>
-                  </li>
+                  <t:if test="!ulogovan">
+                      <li>
+                          <t:pagelink page="Registracija">
+                              <span class="glyphicon glyphicon-user"></span>${message:registracija}</t:pagelink>
+                      </li>
+                      <li><t:pagelink page="Login">
+                              <span class="glyphicon glyphicon-log-in"></span>${message:prijava}</t:pagelink>
+                      </li>
+                  </t:if>
+                  <t:if test="ulogovan">
+                      <li>
+                          <t:pagelink page="Index" class="navbar-right">${ulogovaniKorisnik.korisnickoIme}</t:pagelink>
+                      </li>
+                      <li>
+                          <t:eventlink t:event="logout" ><span class="glyphicon glyphicon-log-out"></span>${message:odjava}</t:eventlink>
+                      </li>
+
+                  </t:if>
               </ul>
             </div>
           </div>
-        </nav>
+    </nav>
 
 </div> <!-- /container -->
 

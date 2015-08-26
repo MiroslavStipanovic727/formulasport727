@@ -1,0 +1,57 @@
+<html t:type="layout" title="${izabranaVelikaNagrada.nazivVn} - ${izabranaTrka.nazivTrke}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <div class="container">
+        <div class="row">
+            <p>
+                <h3>
+                    ${izabranaVelikaNagrada.nazivVn} - ${izabranaTrka.nazivTrke}
+                    - <t:output format="format" value="izabranaTrka.vremeTrke"/>
+                </h3>
+            </p>
+            <p>
+                <t:eventlink event="PovratakNaVN">
+                    ${message:povratak}
+                </t:eventlink>
+            </p>
+        </div>
+        <div class="row">
+            <table>
+                <th class="centartekst razmakld">
+                    ${message:pozicija}
+                </th>
+                <th class="centartekst razmakld">
+                    ${message:vozac}
+                </th>
+                <th class="centartekst razmakld">
+                    ${message:tim}
+                </th>
+                <th class="centartekst razmakld">
+                    ${message:rezultat}
+                </th>
+                <t:loop source="tabelaRezultata" value="redRezultata">
+                    <t:any element="tr" class="tabelagranica">
+                        <td class="razmakld">
+                            ${redRezultata.pozicijaTr}
+                        </td>
+                        <td class="razmakld">
+                            ${redRezultata.vozId.imeVozaca} ${redRezultata.vozId.prezimeVozaca}
+                        </td>
+                        <td class="razmakld">
+                            ${redRezultata.vozId.timId.nazivTima}
+                        </td>
+                        <td class="razmakld">
+                            ${redRezultata.ostvareniRezultat}
+                        </td>
+                    </t:any>
+                </t:loop>
+            </table>
+            <p>
+                <t:eventlink event="PovratakNaVN">
+                    ${message:povratak}
+                </t:eventlink>
+            </p>
+        </div>    
+    </div>
+</html>

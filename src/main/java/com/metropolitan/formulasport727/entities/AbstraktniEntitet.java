@@ -14,7 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
- *
+ * Klasa koja predstvlja entitet koji nasleđuju svi ostali entiteti
  * @author Miroslav Stipanović 727
  */
 @MappedSuperclass

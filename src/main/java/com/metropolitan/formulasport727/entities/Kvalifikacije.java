@@ -18,9 +18,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Kvalifikacije iz baze u aplikaciji
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -31,10 +33,12 @@ public class Kvalifikacije extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "NAZIV_KVALIFIKACIJA")
+    @Validate("required")
     private String nazivKvalifikacija;
     @Basic(optional = false)
     @Column(name = "VREME_KVALIFIKACIJA")
     @Temporal(TemporalType.TIMESTAMP)
+    @Validate("required")
     private Date vremeKvalifikacija;
     @JoinColumn(name = "VEL_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
@@ -42,6 +46,7 @@ public class Kvalifikacije extends AbstraktniEntitet {
     @OneToMany(mappedBy = "kvaId")
     private List<PozicioniRezultat> pozicioniRezultatList;
 
+    @Inject
     public Kvalifikacije() {
     }
 
@@ -117,7 +122,7 @@ public class Kvalifikacije extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Kvalfikacije: "+getNazivKvalifikacija();
+        return getNazivKvalifikacija();
     }
     
 }

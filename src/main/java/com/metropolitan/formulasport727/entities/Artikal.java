@@ -16,9 +16,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 /**
- *
+ * Klasa koja predstavlja entitet Artikal iz baze u aplikaciji 
  * @author Miroslav Stipanović 727
  */
 @Entity
@@ -29,14 +31,17 @@ public class Artikal extends AbstraktniEntitet {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "NAZIV_ARTIKLA")
+    @Validate("required")
     private String nazivArtikla;
     @Column(name = "SLIKA_")
     private String slika;
     @Basic(optional = false)
     @Column(name = "KRATAK_OPIS")
+    @Validate("required")
     private String kratakOpis;
     @Basic(optional = false)
     @Column(name = "CENA")
+    @Validate("required")
     private double cena;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "artId")
     private List<KorpaArtikal> korpaArtikalList;
@@ -44,7 +49,7 @@ public class Artikal extends AbstraktniEntitet {
     @ManyToOne(optional = false)
     private TipArtikla tipId;
     
-
+    @Inject
     public Artikal() {
     }
 
@@ -137,7 +142,7 @@ public class Artikal extends AbstraktniEntitet {
 
     @Override
     public String toString() {
-        return "Artikal: "+getNazivArtikla();
+        return getNazivArtikla();
     }
     
 }
